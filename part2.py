@@ -1,6 +1,7 @@
 reader_file = "./Ressources/readers.txt"
 books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
+
 ###  PART TWO PRIMARY FUNCTIONS
 
 def addBook():
@@ -43,16 +44,22 @@ def editBook():
 
 def deleteBook():
     list_of_books = open(books_file, "r")
+    book_reads = open(books_read_file, "r")
     list_of_books_readlines = list_of_books.readlines()
+    book_reads_readlines = book_reads.readlines()
     book_to_delete = input("Which book do you want to delete ? \n")
     while book_to_delete not in [x.replace('\n', '') for x in list_of_books_readlines]:
         print("The book is not in the list")
         book_to_delete = input("Which book do you want to delete ? \n")
     index = getIndexBook(book_to_delete)
+    for i in range(len(book_reads_readlines)):
+        if str(index) in book_reads_readlines[i]:
+            book_reads_readlines[i]=book_reads_readlines[i].replace(","+str(index),"")
     list_of_books_readlines[index] = "\n"
     list_of_books = open(books_file, "w")
+    book_reads = open(books_read_file,"w")
     list_of_books.writelines(list_of_books_readlines)
-
+    book_reads.writelines(book_reads_readlines)
 
 ### PART TWO SECONDARY FUNCTIONS
 
