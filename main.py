@@ -1,4 +1,6 @@
 from menu import *
 
 if __name__ == "__main__":
-    base_menu()
+    power = "on"
+    while power == "on":
+        base_menu()

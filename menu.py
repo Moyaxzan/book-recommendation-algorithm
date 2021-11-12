@@ -13,18 +13,24 @@ def menu_part1():
     choice = input("What do you want to do ?\n")
     if choice == "1":
         displayBooks()
-    if choice == "2":
+    elif choice == "2":
         addReader()
-    if choice == "3":
+    elif choice == "3":
         pseudo = input("what pseudo do you want to view ?\n")
+        if pseudo == "back":
+            return menu_part1()
         viewReader(pseudo)
-    if choice == "4":
+    elif choice == "4":
         pseudo = input("what pseudo do you want to edit ?\n")
+        if pseudo == "back":
+            return menu_part1()
         editReader(pseudo)
-    if choice == "5":
-        pseudo = input("what pseudo do you want to edit ?\n")
+    elif choice == "5":
+        pseudo = input("what pseudo do you want to delete ?\n")
+        if pseudo == "back":
+            return menu_part1()
         deleteReader(pseudo)
-    if choice == "back":
+    elif choice == "back":
         base_menu()
 
 
@@ -45,14 +51,18 @@ def menu_part2():
 
 
 def base_menu():
+    print("Hi user ! don't forget, you can back at any time just by writing 'back'. Enjoy !")
     print("Write 1 to access part1 functions")
     print("Write 2 to access part2 functions")
     print("Write 3 to access part3 functions")
-    choice = int(input("What do you want to do ?\n"))
-    if choice == 1:
+    choice = input("What do you want to do ?\n")
+    if choice == "1":
         menu_part1()
-    if choice == 2:
+    elif choice == "2":
         menu_part2()
-    if choice == 3:
+    elif choice == "3":
         pass
-
+    elif choice == "back":
+        print("you cannot go back from here. \n")
+        base_menu()
+        return

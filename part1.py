@@ -20,6 +20,8 @@ def addReader():
     books_read = open(books_read_file, "a")
     ### Calls createLineReader() which create the right line to insert into "readers.txt" and "booksread.txt" files
     line_reader_file, line_books_read = createLineReader()
+    if line_reader_file == None and line_books_read == None:
+        return
     ### Write into "readers.txt" and "booksread.txt" the lines we just created
     readers.write(line_reader_file)
     books_read.write(line_books_read)
@@ -63,6 +65,8 @@ def editReader(pseudonym):
     readers_lines = readers.readlines()
     book_reads_lines = book_reads.readlines()
     line_readers, line_books_read = createLineReader()
+    if line_readers == None and line_books_read == None:
+        return
     index = getIndexPseudonym(pseudonym)
     readers_lines[index] = line_readers
     book_reads_lines[index] = line_books_read
@@ -122,6 +126,8 @@ def createLineReader():
     list_pseudonyms = list_pseudonym()
     while pseudobool:
         pseudo = input("What is your pseudonym ?\n")
+        if pseudo == "back":
+            return None, None
         if len(pseudo) >= 3:
             pseudobool = False
         else:
@@ -135,9 +141,11 @@ def createLineReader():
         print("1 if you are a man")
         print("2 if you are a woman")
         print("3 if you don't want to specify")
-        gender = int(input())
-        if gender == 1 or gender == 2 or gender == 3:
+        gender = input()
+        if gender == "1" or gender == "2" or gender == "3":
             genderbool = False
+        elif gender == "back":
+            return None, None
         else:
             print("invalide input : you need to type 1, 2 or 3")
     while agebool:

@@ -13,7 +13,6 @@ def addBook():
         if book_to_append == "back":
             break
     if book_to_append == "back":
-        menu_part2()
         return
     print(list_of_books_readlines)
     list_of_books = open(books_file, "a")
@@ -30,7 +29,6 @@ def editBook():
             print("The book is not in the list")
             book_to_edit = input("Which book do you want to edit ? Write 'back' to go back.\n")
         if book_to_edit == "back":
-            menu_part2()
             return
         new_name_book = input("What is the new name of the book ? Write 'back' to go back.\n")
         if new_name_book == "back":
