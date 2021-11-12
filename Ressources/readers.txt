@@ -1,0 +1,2 @@
+Marie, 2, 3, 7
+Hello Kitty, 3, 3, 4
