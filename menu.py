@@ -4,21 +4,24 @@ from part3 import *
 ### MENU FUNCTIONS
 
 def menu_part1():
-    print("Write 1 to add a reader")
-    print("Write 2 to view a reader")
-    print("Write 3 to edit a reader")
-    print("Write 4 to delete a reader")
+    print("Write 1 to display books")
+    print("Write 2 to add a reader")
+    print("Write 3 to view a reader")
+    print("Write 4 to edit a reader")
+    print("Write 5 to delete a reader")
     print("Write 'back' to return to the last menu")
     choice = input("What do you want to do ?\n")
     if choice == "1":
-        addReader()
+        displayBooks()
     if choice == "2":
+        addReader()
+    if choice == "3":
         pseudo = input("what pseudo do you want to view ?\n")
         viewReader(pseudo)
-    if choice == "3":
+    if choice == "4":
         pseudo = input("what pseudo do you want to edit ?\n")
         editReader(pseudo)
-    if choice == "4":
+    if choice == "5":
         pseudo = input("what pseudo do you want to edit ?\n")
         deleteReader(pseudo)
     if choice == "back":
