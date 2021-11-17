@@ -10,12 +10,11 @@ def addBook():
     book_to_append = input("What book do you want to add ?\n")
     while book_to_append in [x.replace('\n', '') for x in list_of_books_readlines]:
         print("The book is already in the list\n")
-        book_to_append = input("What book do you want to add ? Write 'back' to go back.\n")
+        book_to_append = input("What book do you want to add ? Write 'back'1 to go back.\n")
         if book_to_append == "back":
             break
     if book_to_append == "back":
         return
-    print(list_of_books_readlines)
     list_of_books = open(books_file, "a")
     list_of_books.write(book_to_append + "\n")
 

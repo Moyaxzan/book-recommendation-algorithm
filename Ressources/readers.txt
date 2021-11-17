@@ -1,2 +1,4 @@
 Marie, 2, 3, 7
 Hello Kitty, 3, 3, 4
+Pierre, 3, 3, 4
+Gwendal, 1, 1, 1
