@@ -2,8 +2,43 @@ reader_file = "./Ressources/readers.txt"
 books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
 dicogenre = {1: "sci-fi", 2: "Biography", 3: "Horror", 4: "Romance", 5: "Fable", 6: "History", 7: "Comedy"}
-##todo make a dico for all of arguments ?
 ###  PART ONE PRIMARY FUNCTIONS
+
+def menu_part1():
+    print("Write 1 to display books")
+    print("Write 2 to add a reader")
+    print("Write 3 to view a reader")
+    print("Write 4 to edit a reader")
+    print("Write 5 to delete a reader")
+    print("Write 'back' to return to the last menu")
+    choice = input("What do you want to do ?\n")
+    if choice == "1":
+        displayBooks()
+    elif choice == "2":
+        addReader()
+    elif choice == "3":
+        pseudo = input("what pseudo do you want to view ?\n")
+        if pseudo == "back":
+            menu_part1()
+        else:
+            viewReader(pseudo)
+    elif choice == "4":
+        pseudo = input("what pseudo do you want to edit ?\n")
+        if pseudo == "back":
+            menu_part1()
+        else:
+            editReader(pseudo)
+    elif choice == "5":
+        pseudo = input("what pseudo do you want to delete ?\n")
+        if pseudo == "back":
+            menu_part1()
+        else:
+            deleteReader(pseudo)
+    elif choice == "back":
+        return
+    else:
+        menu_part1()
+
 
 def displayBooks(list_of_books=books_file):
     ### Open the "books.txt" file
