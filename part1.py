@@ -12,33 +12,44 @@ def menu_part1():
     print("Write 5 to delete a reader")
     print("Write 'back' to return to the last menu")
     choice = input("What do you want to do ?\n")
+    power = 1
     if choice == "1":
         displayBooks()
     elif choice == "2":
-        addReader()
+        power = addReader()
     elif choice == "3":
         pseudo = input("what pseudo do you want to view ?\n")
         if pseudo == "back":
             menu_part1()
+        elif pseudo == "exit":
+            power = 0
         else:
             viewReader(pseudo)
     elif choice == "4":
         pseudo = input("what pseudo do you want to edit ?\n")
         if pseudo == "back":
             menu_part1()
+        elif pseudo == "exit":
+            power = 0
         else:
             editReader(pseudo)
     elif choice == "5":
         pseudo = input("what pseudo do you want to delete ?\n")
         if pseudo == "back":
             menu_part1()
+        elif pseudo == "exit":
+            power = 0
         else:
-            deleteReader(pseudo)
+            power = deleteReader(pseudo)
     elif choice == "back":
         return
+    elif choice == "exit":
+        power = 0
     else:
-        menu_part1()
-
+        print("invalid input. try again.")
+        return menu_part1()
+    if power == 0:
+        return 0
 
 def displayBooks(list_of_books=books_file):
     # Open the "books.txt" file
@@ -57,6 +68,8 @@ def addReader():
     line_reader_file, line_books_read = createLineReader()
     if line_reader_file == None and line_books_read == None:
         menu_part1()
+    elif line_reader_file == 0 and line_books_read == 0:
+        return 0
     # Write into "readers.txt" and "booksread.txt" the lines we just created
     readers.write(line_reader_file)
     books_read.write(line_books_read)
@@ -102,6 +115,8 @@ def editReader(pseudonym):
     line_readers, line_books_read = createLineReader()
     if line_readers == None and line_books_read == None:
         return
+    elif line_readers == 0 and line_books_read == 0:
+        return 0
     index = getIndexPseudonym(pseudonym)
     readers_lines[index] = line_readers
     book_reads_lines[index] = line_books_read
@@ -163,6 +178,8 @@ def createLineReader():
         pseudo = input("What is your pseudonym ?\n")
         if pseudo == "back":
             return None, None
+        elif pseudo == "exit":
+            return 0, 0
         if len(pseudo) >= 3:
             pseudobool = False
         else:
@@ -184,6 +201,8 @@ def createLineReader():
             genderbool = False
         elif gender == "back":
             return None, None
+        elif gender == "exit":
+            return 0, 0
         else:
             print("invalide input : you need to type 1, 2 or 3")
     while agebool:
@@ -191,11 +210,13 @@ def createLineReader():
         print("1 if you are 18 years old")
         print("2 if you are between 18 and 25 years old")
         print("3 if you are over 25 years old")
-        age = int(input())
-        if age == 1 or age == 2 or age == 3:
+        age = input()
+        if age == "1" or age == "2" or age == "3":
             agebool = False
         elif age == "back":
             return None, None
+        elif age == "exit":
+            return 0, 0
         else:
             print("invalide input : you need to type 1, 2 or 3")
     while readingStylebool:
@@ -207,11 +228,13 @@ def createLineReader():
                     5. Fable
                     6. History
                     7. Comedy""")
-        readingStyle = int(input())
-        if readingStyle >= 1 and readingStyle <= 7:
-            readingStylebool = False
-        elif readingStyle == "back":
+        readingStyle = input()
+        if readingStyle == "back":
             return None, None
+        elif readingStyle == "exit":
+            return 0, 0
+        elif int(readingStyle) >= 1 and int(readingStyle) <= 7:
+            readingStylebool = False
         else:
             print("invalide input : you need to type a number between 1 and 7")
     line_reader = str(pseudo) + ", " + str(gender) + ", " + str(age) + ", " + str(readingStyle) + "\n"
