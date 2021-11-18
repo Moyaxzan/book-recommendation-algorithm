@@ -2,7 +2,7 @@ reader_file = "./Ressources/readers.txt"
 books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
 dicogenre = {1: "sci-fi", 2: "Biography", 3: "Horror", 4: "Romance", 5: "Fable", 6: "History", 7: "Comedy"}
-###  PART ONE PRIMARY FUNCTIONS
+#  PART ONE PRIMARY FUNCTIONS
 
 def menu_part1():
     print("Write 1 to display books")
@@ -41,23 +41,23 @@ def menu_part1():
 
 
 def displayBooks(list_of_books=books_file):
-    ### Open the "books.txt" file
+    # Open the "books.txt" file
     f = open(list_of_books, "r")
-    ### Puts every books into a list "books"
+    # Puts every books into a list "books"
     books = f.readlines()
     for i in range(len(books)):
         print(str(i) + ".", books[i])
 
 
 def addReader():
-    ### Open the "readers.txt" and "booksread.txt" files
+    # Open the "readers.txt" and "booksread.txt" files
     readers = open(reader_file, "a")
     books_read = open(books_read_file, "a")
-    ### Calls createLineReader() which create the right line to insert into "readers.txt" and "booksread.txt" files
+    # Calls createLineReader() which create the right line to insert into "readers.txt" and "booksread.txt" files
     line_reader_file, line_books_read = createLineReader()
     if line_reader_file == None and line_books_read == None:
-        return
-    ### Write into "readers.txt" and "booksread.txt" the lines we just created
+        menu_part1()
+    # Write into "readers.txt" and "booksread.txt" the lines we just created
     readers.write(line_reader_file)
     books_read.write(line_books_read)
     readers.close()
@@ -65,7 +65,7 @@ def addReader():
 
 
 def viewReader(pseudonym):
-    ### Opens the "readers.txt" and create a list of the lines
+    # Opens the "readers.txt" and create a list of the lines
     readers = open(reader_file, "r")
     readers_lines = readers.read()
     if pseudonym in readers_lines:
@@ -129,7 +129,7 @@ def deleteReader(pseudonym):
     book_reads.close()
 
 
-### PART ONE SECONDARY FUNCTIONS
+# PART ONE SECONDARY FUNCTIONS
 
 def getIndexPseudonym(pseudonym):
     list_of_pseudonym = list_pseudonym()
@@ -167,10 +167,13 @@ def createLineReader():
             pseudobool = False
         else:
             print("invalide input : your pseudonym must exceed 2 characters.")
-        if pseudo not in list_pseudonyms:
-            pseudobool = False
+            pseudobool = True
+        if pseudo not in list_pseudonyms :
+            if not pseudobool :
+                pseudobool = False
         else:
             print("invalide input : pseudonym already taken")
+            pseudobool = True
     while genderbool:
         print("PRESS : ")
         print("1 if you are a man")
@@ -191,6 +194,8 @@ def createLineReader():
         age = int(input())
         if age == 1 or age == 2 or age == 3:
             agebool = False
+        elif age == "back":
+            return None, None
         else:
             print("invalide input : you need to type 1, 2 or 3")
     while readingStylebool:
@@ -205,20 +210,22 @@ def createLineReader():
         readingStyle = int(input())
         if readingStyle >= 1 and readingStyle <= 7:
             readingStylebool = False
+        elif readingStyle == "back":
+            return None, None
         else:
             print("invalide input : you need to type a number between 1 and 7")
     line_reader = str(pseudo) + ", " + str(gender) + ", " + str(age) + ", " + str(readingStyle) + "\n"
     print("Which books have you read ?")
-    ### Prints every books in the file books.txt
+    # Prints every books in the file books.txt
     liste = list_of_books.readlines()
     for i in range(len(liste)):
         print(i, liste[i])
     appendBool = True
-    ### Initialize a string that we will append to the file when the user is over adding books
+    # Initialize a string that we will append to the file when the user is over adding books
     line_books_read = ""
-    ### Adds the pseudonym of the user
+    # Adds the pseudonym of the user
     line_books_read += str(pseudo) + ","
-    ### This while adds every book the user has read
+    # This while adds every book the user has read
     while appendBool:
         input_livres = input("Enter a number or 'over' if you are finished\n")
         try:
@@ -227,7 +234,7 @@ def createLineReader():
         except:
             if input_livres == "over":
                 appendBool = False
-    ### Remove the last comma to avoid having one too much
+    # Remove the last comma to avoid having one too much
     line_books_read = line_books_read[0:len(line_books_read) - 1]
     line_books_read += "\n"
     return line_reader, line_books_read
