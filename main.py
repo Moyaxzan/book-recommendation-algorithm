@@ -2,7 +2,7 @@ from part1 import *
 from part2 import *
 from part3 import *
 
-##todo faire le power off
+
 
 if __name__ == "__main__":
     power = 1

@@ -10,14 +10,24 @@ def menu_part2():
     print("Write 3 to delete a book")
     print("Write 'back' to return to the last menu")
     choice = input("What do you want to do ?\n")
+    power = 1
     if choice == "1":
-        addBook()
+        power = addBook()
     elif choice == "2":
-        editBook()
+        power = editBook()
     elif choice == "3":
-        deleteBook()
+        power = deleteBook()
     elif choice == "back":
-        return
+        return 1
+    elif choice == "exit":
+        power = 0
+    else:
+        print("invalid input. try again.")
+        return menu_part2()
+    if power == 0:
+        return 0
+    else:
+        return 1
 
 
 def addBook():
@@ -31,6 +41,8 @@ def addBook():
             return menu_part2()
     if book_to_append == "back":
         return menu_part2()
+    elif book_to_append == "exit":
+        return 0
     list_of_books = open(books_file, "a")
     list_of_books.write(book_to_append + "\n")
 
@@ -41,20 +53,22 @@ def editBook():
     book_to_edit, new_name_book = None, None
     backbool = True
     book_to_edit = input("Which book do you want to edit ? Write 'back' to go back.\n")
-    while book_to_edit not in [x.replace('\n', '') for x in list_of_books_readlines] and book_to_edit != "back":
+    while book_to_edit not in [x.replace('\n', '') for x in list_of_books_readlines] and book_to_edit != "back" and book_to_edit != "exit":
         print("The book is not in the list")
         book_to_edit = input("Which book do you want to edit ? Write 'back' to go back.\n")
-    if book_to_edit != "back":
+    if book_to_edit != "back" and book_to_edit != "exit":
         new_name_book = input("What is the new name of the book ? Write 'back' to go back.\n")
     if new_name_book == "back" or book_to_edit == "back":
         backbool = False
+    elif new_name_book == "exit" or book_to_edit == "exit":
+        return 0
     if backbool:
         index = getIndexBook(book_to_edit)
         list_of_books_readlines[index] = new_name_book + "\n"
         list_of_books = open(books_file, "w")
         list_of_books.writelines(list_of_books_readlines)
     else:
-        menu_part2()
+        return menu_part2()
 
 def deleteBook():
     list_of_books = open(books_file, "r")
@@ -64,6 +78,8 @@ def deleteBook():
     book_to_delete = input("Which book do you want to delete ? \n")
     if book_to_delete == "back":
         return menu_part2()
+    elif book_to_delete == "exit":
+        return 0
     while book_to_delete not in [x.replace('\n', '') for x in list_of_books_readlines]:
         print("The book is not in the list")
         book_to_delete = input("Which book do you want to delete ? \n")

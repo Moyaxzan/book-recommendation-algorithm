@@ -20,7 +20,7 @@ def menu_part1():
     elif choice == "3":
         pseudo = input("what pseudo do you want to view ?\n")
         if pseudo == "back":
-            menu_part1()
+            return menu_part1()
         elif pseudo == "exit":
             power = 0
         else:
@@ -28,21 +28,21 @@ def menu_part1():
     elif choice == "4":
         pseudo = input("what pseudo do you want to edit ?\n")
         if pseudo == "back":
-            menu_part1()
+            return menu_part1()
         elif pseudo == "exit":
             power = 0
         else:
-            editReader(pseudo)
+            power = editReader(pseudo)
     elif choice == "5":
         pseudo = input("what pseudo do you want to delete ?\n")
         if pseudo == "back":
-            menu_part1()
+            return menu_part1()
         elif pseudo == "exit":
             power = 0
         else:
             power = deleteReader(pseudo)
     elif choice == "back":
-        return
+        return 1
     elif choice == "exit":
         power = 0
     else:
@@ -50,6 +50,8 @@ def menu_part1():
         return menu_part1()
     if power == 0:
         return 0
+    else:
+        return 1
 
 def displayBooks(list_of_books=books_file):
     # Open the "books.txt" file
@@ -67,7 +69,7 @@ def addReader():
     # Calls createLineReader() which create the right line to insert into "readers.txt" and "booksread.txt" files
     line_reader_file, line_books_read = createLineReader()
     if line_reader_file == None and line_books_read == None:
-        menu_part1()
+        return menu_part1()
     elif line_reader_file == 0 and line_books_read == 0:
         return 0
     # Write into "readers.txt" and "booksread.txt" the lines we just created
@@ -114,7 +116,7 @@ def editReader(pseudonym):
     book_reads_lines = book_reads.readlines()
     line_readers, line_books_read = createLineReader()
     if line_readers == None and line_books_read == None:
-        return
+        return menu_part1()
     elif line_readers == 0 and line_books_read == 0:
         return 0
     index = getIndexPseudonym(pseudonym)
@@ -255,7 +257,11 @@ def createLineReader():
             int(input_livres)
             line_books_read += input_livres + ","
         except:
-            if input_livres == "over":
+            if input_livres == "back":
+                return None,None
+            elif input_livres == "exit":
+                return 0,0
+            elif input_livres == "over":
                 appendBool = False
     # Remove the last comma to avoid having one too much
     line_books_read = line_books_read[0:len(line_books_read) - 1]
