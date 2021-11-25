@@ -17,29 +17,19 @@ def menu_part1():
         displayBooks()
     elif choice == "2":
         power = addReader()
-    elif choice == "3":
-        pseudo = input("what pseudo do you want to view ?\n")
+    elif choice == "3" or choice == "4" or choice == "5":
+        L=["view","edit","delete"]
+        input_string = "what pseudo do you want to " + str(L[int(choice)-3]) + "? \n"
+        pseudo = input(input_string)
         if pseudo == "back":
             return menu_part1()
         elif pseudo == "exit":
             power = 0
-        else:
+        if choice == "3":
             viewReader(pseudo)
-    elif choice == "4":
-        pseudo = input("what pseudo do you want to edit ?\n")
-        if pseudo == "back":
-            return menu_part1()
-        elif pseudo == "exit":
-            power = 0
-        else:
+        elif choice == "4":
             power = editReader(pseudo)
-    elif choice == "5":
-        pseudo = input("what pseudo do you want to delete ?\n")
-        if pseudo == "back":
-            return menu_part1()
-        elif pseudo == "exit":
-            power = 0
-        else:
+        elif choice == "5":
             power = deleteReader(pseudo)
     elif choice == "back":
         return 1
@@ -106,7 +96,7 @@ def viewReader(pseudonym):
                 genre = dicogenre[int(lineSplited[3])]
                 print(lineSplited[0], genderstr, pronoun, agestr, "and likes", genre, "books.")
     else:
-        print("no")
+        print("This pseudonym is not registered")
 
 
 def editReader(pseudonym):

@@ -4,6 +4,8 @@ from part3 import *
 
 
 
+
+
 if __name__ == "__main__":
     power = 1
     print("Hi user ! don't forget, you can back at any time just by writing 'back' and exit by just writting 'exit'. Enjoy !")
@@ -17,9 +19,11 @@ if __name__ == "__main__":
         elif choice == "2":
             power = menu_part2()
         elif choice == "3":
-            pass
+            power = menu_part3()
         elif choice == "back":
             print("you cannot go back from here. \n")
         elif choice == "exit":
             power = 0
     print("\nHope you enjoyed ! Bye !")
+
+
