@@ -18,7 +18,7 @@ def menu_part1():
     elif choice == "2":
         power = addReader()
     elif choice == "3" or choice == "4" or choice == "5":
-        L=["view","edit","delete"]
+        L = ["view","edit","delete"]
         input_string = "what pseudo do you want to " + str(L[int(choice)-3]) + "? \n"
         pseudo = input(input_string)
         if pseudo == "back":
