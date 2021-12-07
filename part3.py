@@ -21,7 +21,7 @@ def menu_part3():
         pseudo = input("what is your pseudonyme ?\n")
         while pseudo not in list_pseudonym():
             pseudo = input("what is your pseudonyme ?\n")
-        power = rateBook("pseudo)")
+        power = rateBook(pseudo)
     if power == 0:
         return 0
     else:
@@ -62,12 +62,11 @@ def rateBook(reader, *args):
     matrix = getMatrix()
     books_lines = books.readlines()
     if args == ():
-        print(reader_books(reader))
-        """print(str(cpt+1) + ".", books_lines[cpt])"""
-
-
-
-
+        list_books_read = reader_books(reader)
+        cpt = 0
+        for book in list_books_read:
+            print(str(cpt+1) + ".", books_lines[int(book)])
+            cpt += 1
         book_to_rate = input("Which book do you want to rate ?\n")
     else:
         book_to_rate = args[0]
@@ -79,9 +78,8 @@ def reader_books(reader):
     for line in books_read_lines:
         list_line = line.split(",")
         if list_line[0] == reader:
-            print(list_line)
-            return list_line
-        print(list_line[0], list_line[0] == reader)
+            list_line[len(list_line)-1] = list_line[len(list_line)-1].replace('\n', '')
+            return list_line[1:len(list_line)]
 
 
 

@@ -49,7 +49,7 @@ def displayBooks(list_of_books=books_file):
     # Puts every books into a list "books"
     books = f.readlines()
     for i in range(len(books)):
-        print(str(i) + ".", books[i])
+        print(str(i+1) + ".", books[i])
 
 
 def addReader():
@@ -104,7 +104,7 @@ def editReader(pseudonym):
     book_reads = open(books_read_file, "r")
     readers_lines = readers.readlines()
     book_reads_lines = book_reads.readlines()
-    line_readers, line_books_read = createLineReader()
+    line_readers, line_books_read = createLineReader(pseudonym)
     if line_readers == None and line_books_read == None:
         return menu_part1()
     elif line_readers == 0 and line_books_read == 0:
@@ -159,7 +159,7 @@ def list_pseudonym():
     return list_pseudonym
 
 
-def createLineReader():
+def createLineReader(*pseudonym):
     pseudobool = True
     genderbool = True
     agebool = True
@@ -180,9 +180,12 @@ def createLineReader():
         if pseudo not in list_pseudonyms :
             if not pseudobool :
                 pseudobool = False
+        elif pseudonym[0] == pseudo:
+            pseudobool = False
         else:
             print("invalide input : pseudonym already taken")
             pseudobool = True
+        """print(pseudonym[0], pseudo, pseudo == pseudonym)"""
     while genderbool:
         print("PRESS : ")
         print("1 if you are a man")
