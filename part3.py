@@ -18,9 +18,9 @@ def menu_part3():
     elif choice == "2":
         getMatrix()
     elif choice == "3":
-        pseudo = input("what is your pseudonyme ?\n")
+        pseudo = input("what is your pseudonym ?\n")
         while pseudo not in list_pseudonym():
-            pseudo = input("what is your pseudonyme ?\n")
+            pseudo = input("what is your pseudonym ?\n")
         power = rateBook(pseudo)
     if power == 0:
         return 0
@@ -41,13 +41,7 @@ def resetMatrix():
     for i in readers_lines:
         matrix_lines.append(str(i)[:-1])
     matrix = [["0" for j in range(len(matrix_columns))] for i in range(len(matrix_lines))]
-    for i in range(len(matrix_lines)):
-        for j in range(len(matrix_columns)):
-            if j == len(matrix_columns) - 1:
-                matrix_file.write(matrix[i][j])
-            else:
-                matrix_file.write(matrix[i][j] + " ")
-        matrix_file.write("\n")
+    writeInMatrix(matrix)
 
 def getMatrix():
     matrix_file = open(scoring_matrix_file, "r")
@@ -61,16 +55,23 @@ def rateBook(reader, *args):
     books = open(books_file, "r")
     matrix = getMatrix()
     books_lines = books.readlines()
+    index_reader = getIndexPseudonym(reader)
     if args == ():
         list_books_read = reader_books(reader)
         cpt = 0
         for book in list_books_read:
             print(str(cpt+1) + ".", books_lines[int(book)])
             cpt += 1
-        book_to_rate = input("Which book do you want to rate ?\n")
+        num_book_to_rate = int(input("Which book do you want to rate ?\n"))
+        index_book_to_rate = int(list_books_read[num_book_to_rate])
     else:
-        book_to_rate = args[0]
-    note = int(input("Rate this book, from 1 to 5\n"))
+        index_book_to_rate = int(args[0])
+    mark = int(input("Rate this book, from 1 to 5\n"))
+    while mark < 0 or mark > 5:
+        mark = int(input("Rate this book, from 1 to 5\n"))
+    print(index_book_to_rate)
+    matrix[index_reader][index_book_to_rate] = str(mark)
+    writeInMatrix(matrix)
 
 def reader_books(reader):
     books_read = open(books_read_file, "r")
@@ -79,9 +80,27 @@ def reader_books(reader):
         list_line = line.split(",")
         if list_line[0] == reader:
             list_line[len(list_line)-1] = list_line[len(list_line)-1].replace('\n', '')
+            for i in list_line:
+                ordered_list = list_line[1:len(list_line)].sort()
             return list_line[1:len(list_line)]
 
+def getIndexPseudonym(pseudonym):
+    list_of_pseudonym = list_pseudonym()
+    for i in range(len(list_of_pseudonym)):
+        if list_of_pseudonym[i] == pseudonym:
+            index = i
+    return index
 
+
+def writeInMatrix(list):
+    matrix_file = open(scoring_matrix_file, "w")
+    for i in range(len(list)):
+        for j in range(len(list[i])):
+            if j == len(list[i]) - 1:
+                matrix_file.write(list[i][j])
+            else:
+                matrix_file.write(list[i][j] + " ")
+        matrix_file.write("\n")
 
 
 
