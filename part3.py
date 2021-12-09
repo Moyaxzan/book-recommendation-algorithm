@@ -63,14 +63,14 @@ def rateBook(reader, *args):
             print(str(cpt+1) + ".", books_lines[int(book)])
             cpt += 1
         num_book_to_rate = int(input("Which book do you want to rate ?\n"))
-        index_book_to_rate = int(list_books_read[num_book_to_rate])
+        index_book_to_rate = int(list_books_read[num_book_to_rate-1])
     else:
         index_book_to_rate = int(args[0])
     mark = int(input("Rate this book, from 1 to 5\n"))
     while mark < 0 or mark > 5:
         mark = int(input("Rate this book, from 1 to 5\n"))
-    print(index_book_to_rate)
-    matrix[index_reader][index_book_to_rate] = str(mark)
+    print(index_reader, index_book_to_rate, matrix)
+    matrix[index_reader][index_book_to_rate-countDeletedBooks()] = str(mark)
     writeInMatrix(matrix)
 
 def reader_books(reader):
@@ -80,8 +80,6 @@ def reader_books(reader):
         list_line = line.split(",")
         if list_line[0] == reader:
             list_line[len(list_line)-1] = list_line[len(list_line)-1].replace('\n', '')
-            for i in list_line:
-                ordered_list = list_line[1:len(list_line)].sort()
             return list_line[1:len(list_line)]
 
 def getIndexPseudonym(pseudonym):
@@ -102,5 +100,11 @@ def writeInMatrix(list):
                 matrix_file.write(list[i][j] + " ")
         matrix_file.write("\n")
 
-
-
+def countDeletedBooks():
+    count=0
+    books = open(books_file, "r")
+    books_readlines= books.readlines()
+    for i in books_readlines:
+        if i=="\n":
+            count+=1
+    return count

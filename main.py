@@ -2,7 +2,7 @@ from part1 import *
 from part2 import *
 from part3 import *
 
-
+## TODO : Lower tout pour le case sensitive
 
 
 

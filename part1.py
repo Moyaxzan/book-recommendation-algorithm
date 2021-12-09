@@ -1,6 +1,7 @@
 reader_file = "./Ressources/readers.txt"
 books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
+scoring_matrix_file = "Ressources/rating_matrix.txt"
 dicogenre = {1: "sci-fi", 2: "Biography", 3: "Horror", 4: "Romance", 5: "Fable", 6: "History", 7: "Comedy"}
 #  PART ONE PRIMARY FUNCTIONS
 
@@ -56,6 +57,8 @@ def addReader():
     # Open the "readers.txt" and "booksread.txt" files
     readers = open(reader_file, "a")
     books_read = open(books_read_file, "a")
+    matrix_file = open(scoring_matrix_file, "r")
+    matrix=matrix_file.readlines()
     # Calls createLineReader() which create the right line to insert into "readers.txt" and "booksread.txt" files
     line_reader_file, line_books_read = createLineReader()
     if line_reader_file == None and line_books_read == None:
@@ -65,6 +68,13 @@ def addReader():
     # Write into "readers.txt" and "booksread.txt" the lines we just created
     readers.write(line_reader_file)
     books_read.write(line_books_read)
+    matrix_file.close()
+    matrix_file = open(scoring_matrix_file, "a")
+    for i in range(len(matrix[0])//2):
+        if i == (len(matrix[0])//2)-1:
+            matrix_file.write("0\n")
+        else:
+            matrix_file.write("0 ")
     readers.close()
     books_read.close()
 
