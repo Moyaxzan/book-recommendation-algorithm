@@ -3,7 +3,7 @@ books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
 scoring_matrix_file = "Ressources/rating_matrix.txt"
 
-from part1 import *
+
 
 # PART THREE PRIMARY FUNCTIONS
 
@@ -51,12 +51,13 @@ def getMatrix():
         matrix.append(i.replace("\n", "").split(" "))
     return matrix
 
-def rateBook(reader, *args):
+
+def rateBook(reader, index_book = -1, mark = -1, index_reader = -1):
     books = open(books_file, "r")
     matrix = getMatrix()
     books_lines = books.readlines()
-    index_reader = getIndexPseudonym(reader)
-    if args == ():
+    if index_book == -1:
+        index_reader = getIndexPseudonym(reader)
         list_books_read = reader_books(reader)
         cpt = 0
         for book in list_books_read:
@@ -64,13 +65,10 @@ def rateBook(reader, *args):
             cpt += 1
         num_book_to_rate = int(input("Which book do you want to rate ?\n"))
         index_book_to_rate = int(list_books_read[num_book_to_rate-1])
-    else:
-        index_book_to_rate = int(args[0])
-    mark = int(input("Rate this book, from 1 to 5\n"))
-    while mark < 0 or mark > 5:
         mark = int(input("Rate this book, from 1 to 5\n"))
-    print(index_reader, index_book_to_rate, matrix)
-    matrix[index_reader][index_book_to_rate-countDeletedBooks()] = str(mark)
+        while mark < 0 or mark > 5:
+            mark = int(input("Rate this book, from 1 to 5\n"))
+    matrix[index_reader][index_book - countDeletedBooks()] = str(mark)
     writeInMatrix(matrix)
 
 def reader_books(reader):
@@ -108,3 +106,14 @@ def countDeletedBooks():
         if i=="\n":
             count+=1
     return count
+def list_pseudonym():
+    f = open(reader_file, "r")
+    cpt = 0
+    readedFile = f.read()
+    list_pseudonym = []
+    for i in readedFile:
+        if i == "\n":
+            cpt += 1
+    for i in range(cpt):
+        list_pseudonym.append(readedFile.split("\n")[i].split(",")[0])
+    return list_pseudonym

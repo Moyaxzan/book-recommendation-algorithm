@@ -3,6 +3,7 @@ books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
 scoring_matrix_file = "Ressources/rating_matrix.txt"
 
+from part1 import *
 ###  PART TWO PRIMARY FUNCTIONS
 
 def menu_part2():
@@ -61,6 +62,7 @@ def editBook():
     list_of_books_readlines = list_of_books.readlines()
     book_to_edit, new_name_book = None, None
     backbool = True
+    displayBooks()
     book_to_edit = input("Which book do you want to edit ? Write 'back' to go back.\n")
     while book_to_edit not in [x.replace('\n', '') for x in list_of_books_readlines] and book_to_edit != "back" and book_to_edit != "exit":
         print("The book is not in the list")
@@ -82,8 +84,11 @@ def editBook():
 def deleteBook():
     list_of_books = open(books_file, "r")
     book_reads = open(books_read_file, "r")
+    scoring_matrix = open(scoring_matrix_file, "r")
     list_of_books_readlines = list_of_books.readlines()
     book_reads_readlines = book_reads.readlines()
+    scoring_matrix_lines = scoring_matrix.readlines()
+    displayBooks()
     book_to_delete = input("Which book do you want to delete ? \n")
     if book_to_delete == "back":
         return menu_part2()
@@ -94,13 +99,20 @@ def deleteBook():
         book_to_delete = input("Which book do you want to delete ? \n")
         if book_to_delete == "back":
             return menu_part2()
+        elif book_to_delete == "exit":
+            return 0
     index = getIndexBook(book_to_delete)
     for i in range(len(book_reads_readlines)):
         if str(index) in book_reads_readlines[i]:
             book_reads_readlines[i]=book_reads_readlines[i].replace(","+str(index),"")
+    for i in range(len(scoring_matrix_lines)):
+        line = scoring_matrix_lines[i][0:index*2] + scoring_matrix_lines[i][index*2+2:len(scoring_matrix_lines[i])]
+        scoring_matrix_lines[i] = line
     list_of_books_readlines[index] = "\n"
     list_of_books = open(books_file, "w")
     book_reads = open(books_read_file,"w")
+    scoring_matrix = open(scoring_matrix_file, "w")
+    scoring_matrix.writelines(scoring_matrix_lines)
     list_of_books.writelines(list_of_books_readlines)
     book_reads.writelines(book_reads_readlines)
 

@@ -3,6 +3,9 @@ books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
 scoring_matrix_file = "Ressources/rating_matrix.txt"
 dicogenre = {1: "sci-fi", 2: "Biography", 3: "Horror", 4: "Romance", 5: "Fable", 6: "History", 7: "Comedy"}
+
+from part3 import *
+
 #  PART ONE PRIMARY FUNCTIONS
 
 def menu_part1():
@@ -49,8 +52,11 @@ def displayBooks(list_of_books=books_file):
     f = open(list_of_books, "r")
     # Puts every books into a list "books"
     books = f.readlines()
-    for i in range(len(books)):
-        print(str(i+1) + ".", books[i])
+    cpt = 1
+    for i in books:
+        if i != "\n":
+            print(str(cpt) + ".", i)
+            cpt += 1
 
 
 def addReader():
@@ -58,6 +64,8 @@ def addReader():
     readers = open(reader_file, "a")
     books_read = open(books_read_file, "a")
     matrix_file = open(scoring_matrix_file, "r")
+    books = open(books_file , "r")
+    books_lines=books.readlines()
     matrix=matrix_file.readlines()
     # Calls createLineReader() which create the right line to insert into "readers.txt" and "booksread.txt" files
     line_reader_file, line_books_read = createLineReader()
@@ -70,8 +78,8 @@ def addReader():
     books_read.write(line_books_read)
     matrix_file.close()
     matrix_file = open(scoring_matrix_file, "a")
-    for i in range(len(matrix[0])//2):
-        if i == (len(matrix[0])//2)-1:
+    for i in range(len(books_lines)-countDeletedBooks()):
+        if i == (len(books_lines)-countDeletedBooks())-1:
             matrix_file.write("0\n")
         else:
             matrix_file.write("0 ")
@@ -196,8 +204,9 @@ def createLineReader(*pseudonym):
         if pseudo not in list_pseudonyms :
             if not pseudobool :
                 pseudobool = False
-        elif pseudonym[0] == pseudo:
-            pseudobool = False
+        elif pseudonym != ():
+            if pseudonym[0] == pseudo:
+                pseudobool = False
         else:
             print("invalide input : pseudonym already taken")
             pseudobool = True
@@ -251,9 +260,7 @@ def createLineReader(*pseudonym):
     line_reader = str(pseudo) + ", " + str(gender) + ", " + str(age) + ", " + str(readingStyle) + "\n"
     print("Which books have you read ?")
     # Prints every books in the file books.txt
-    liste = list_of_books.readlines()
-    for i in range(len(liste)):
-        print(i, liste[i])
+    displayBooks()
     appendBool = True
     # Initialize a string that we will append to the file when the user is over adding books
     line_books_read = ""
@@ -264,12 +271,18 @@ def createLineReader(*pseudonym):
         input_livres = input("Enter a number or 'over' if you are finished\n")
         try:
             int(input_livres)
+            print("1")
+            mark = int(input("Grade this book from 1 to 5\n"))
+            print("2")
             line_books_read += input_livres + ","
+            print(pseudo, input_livres, mark)
+            rateBook(pseudo, input_livres, mark)
+            print("4")
         except:
             if input_livres == "back":
                 return None,None
             elif input_livres == "exit":
-                return 0,0
+                return 0, 0
             elif input_livres == "over":
                 appendBool = False
     # Remove the last comma to avoid having one too much
