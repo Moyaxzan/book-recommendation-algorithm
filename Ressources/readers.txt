@@ -6,3 +6,4 @@ fghjk, 2, 1, 1
 DFGHJK, 1, 1, 1
 dfghjkl, 1, 1, 1
 xcvbhj, 1, 1, 1
+FRQFSDQFDQS, 1, 1, 2

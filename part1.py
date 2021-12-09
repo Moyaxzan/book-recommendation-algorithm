@@ -68,21 +68,18 @@ def addReader():
     books_lines=books.readlines()
     matrix=matrix_file.readlines()
     # Calls createLineReader() which create the right line to insert into "readers.txt" and "booksread.txt" files
-    line_reader_file, line_books_read = createLineReader()
-    if line_reader_file == None and line_books_read == None:
+    line_reader_file, line_books_read, line_matrix = createLineReader()
+    if line_reader_file == None and line_books_read == None and line_matrix == None:
         return menu_part1()
-    elif line_reader_file == 0 and line_books_read == 0:
+    elif line_reader_file == 0 and line_books_read == 0 and line_matrix == 0:
         return 0
     # Write into "readers.txt" and "booksread.txt" the lines we just created
     readers.write(line_reader_file)
     books_read.write(line_books_read)
     matrix_file.close()
     matrix_file = open(scoring_matrix_file, "a")
-    for i in range(len(books_lines)-countDeletedBooks()):
-        if i == (len(books_lines)-countDeletedBooks())-1:
-            matrix_file.write("0\n")
-        else:
-            matrix_file.write("0 ")
+    matrix_file.write(line_matrix)
+    matrix_file.close()
     readers.close()
     books_read.close()
 
@@ -190,12 +187,13 @@ def createLineReader(*pseudonym):
     readingStylebool = True
     list_of_books = open(books_file, "r")
     list_pseudonyms = list_pseudonym()
+    books_lines = list_of_books.readlines()
     while pseudobool:
         pseudo = input("What is your pseudonym ?\n")
         if pseudo == "back":
-            return None, None
+            return None, None, None
         elif pseudo == "exit":
-            return 0, 0
+            return 0, 0, 0
         if len(pseudo) >= 3 and "," not in pseudo:
             pseudobool = False
         else:
@@ -220,9 +218,9 @@ def createLineReader(*pseudonym):
         if gender == "1" or gender == "2" or gender == "3":
             genderbool = False
         elif gender == "back":
-            return None, None
+            return None, None, None
         elif gender == "exit":
-            return 0, 0
+            return 0, 0, 0
         else:
             print("invalide input : you need to type 1, 2 or 3")
     while agebool:
@@ -234,9 +232,9 @@ def createLineReader(*pseudonym):
         if age == "1" or age == "2" or age == "3":
             agebool = False
         elif age == "back":
-            return None, None
+            return None, None, None
         elif age == "exit":
-            return 0, 0
+            return 0, 0, 0
         else:
             print("invalide input : you need to type 1, 2 or 3")
     while readingStylebool:
@@ -250,9 +248,9 @@ def createLineReader(*pseudonym):
                     7. Comedy""")
         readingStyle = input()
         if readingStyle == "back":
-            return None, None
+            return None, None, None
         elif readingStyle == "exit":
-            return 0, 0
+            return 0, 0, 0
         elif int(readingStyle) >= 1 and int(readingStyle) <= 7:
             readingStylebool = False
         else:
@@ -264,29 +262,33 @@ def createLineReader(*pseudonym):
     appendBool = True
     # Initialize a string that we will append to the file when the user is over adding books
     line_books_read = ""
+    line_matrix = ""
     # Adds the pseudonym of the user
     line_books_read += str(pseudo) + ","
+    for i in range(len(books_lines)-countDeletedBooks()):
+        if i == (len(books_lines)-countDeletedBooks())-1:
+            line_matrix+="0\n"
+        else:
+            line_matrix+="0 "
     # This while adds every book the user has read
     while appendBool:
         input_livres = input("Enter a number or 'over' if you are finished\n")
         try:
             int(input_livres)
-            print("1")
-            mark = int(input("Grade this book from 1 to 5\n"))
-            print("2")
+            mark = input("Grade this book from 1 to 5\n")
             line_books_read += input_livres + ","
-            print(pseudo, input_livres, mark)
-            rateBook(pseudo, input_livres, mark)
-            print("4")
+            print("1")
+            print("2")
         except:
             if input_livres == "back":
-                return None,None
+                return None,None, None
             elif input_livres == "exit":
-                return 0, 0
+                return 0, 0, 0
             elif input_livres == "over":
                 appendBool = False
+        line_matrix = str(line_matrix[0:int(input_livres * 2)]) + str(mark) + " " + str(line_matrix[int(int(input_livres) * 2 + 4):len(line_matrix)])
     # Remove the last comma to avoid having one too much
     line_books_read = line_books_read[0:len(line_books_read) - 1]
     line_books_read += "\n"
-    return line_reader, line_books_read
+    return line_reader, line_books_read, line_matrix
 
