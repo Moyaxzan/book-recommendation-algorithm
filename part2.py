@@ -1,6 +1,7 @@
 reader_file = "./Ressources/readers.txt"
 books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
+scoring_matrix_file = "Ressources/rating_matrix.txt"
 
 ###  PART TWO PRIMARY FUNCTIONS
 
@@ -32,6 +33,8 @@ def menu_part2():
 
 def addBook():
     list_of_books = open(books_file, "r")
+    scoring_matrix = open(scoring_matrix_file, "r")
+    matrix_lines = scoring_matrix.readlines()
     list_of_books_readlines = list_of_books.readlines()
     book_to_append = input("What book do you want to add ?\n")
     while book_to_append in [x.replace('\n', '') for x in list_of_books_readlines]:
@@ -43,7 +46,13 @@ def addBook():
         return menu_part2()
     elif book_to_append == "exit":
         return 0
+    for cpt in range(len(matrix_lines)):
+        line = matrix_lines[cpt].rstrip()
+        line += " 0\n"
+        matrix_lines[cpt] = line
     list_of_books = open(books_file, "a")
+    scoring_matrix = open(scoring_matrix_file, "w")
+    scoring_matrix.writelines(matrix_lines)
     list_of_books.write(book_to_append + "\n")
 
 
