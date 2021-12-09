@@ -182,10 +182,10 @@ def createLineReader(*pseudonym):
             return None, None
         elif pseudo == "exit":
             return 0, 0
-        if len(pseudo) >= 3:
+        if len(pseudo) >= 3 and "," not in pseudo:
             pseudobool = False
         else:
-            print("invalide input : your pseudonym must exceed 2 characters.")
+            print("invalide input : your pseudonym must exceed 2 characters and must not contain special characters.")
             pseudobool = True
         if pseudo not in list_pseudonyms :
             if not pseudobool :
@@ -195,7 +195,7 @@ def createLineReader(*pseudonym):
         else:
             print("invalide input : pseudonym already taken")
             pseudobool = True
-        """print(pseudonym[0], pseudo, pseudo == pseudonym)"""
+
     while genderbool:
         print("PRESS : ")
         print("1 if you are a man")
