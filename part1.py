@@ -271,27 +271,35 @@ def createLineReader(*pseudonym):
     line_books_read += str(pseudo) + ","
     for i in range(len(books_lines)-countDeletedBooks()):
         if i == (len(books_lines)-countDeletedBooks())-1:
-            line_matrix+="0\n"
+            line_matrix += "0\n"
         else:
-            line_matrix+="0 "
+            line_matrix += "0 "
+    line_matrix_to_append = line_matrix
     # This while adds every book the user has read
+    registered_book = []
     while appendBool:
-        input_livres = input("Enter a number or 'over' if you are finished\n")
+        input_books = input("Enter the number of the book you've read or 'over' if you are finished\n")
         try:
-            int(input_livres)
-            mark = input("Grade this book from 1 to 5\n")
-            line_books_read += input_livres + ","
-            liste_line_matrix=list(line_matrix)
-            for i in range(len(liste_line_matrix)):
-                if i == int(input_livres)*2:
-                    liste_line_matrix[i] = mark
-            line_matrix_to_append = "".join(liste_line_matrix)
+            int(input_books)
+            if input_books in registered_book:
+                print("You have already registered this book\n")
+            else:
+                registered_book.append(input_books)
+                mark = input("Rate this book from 1 to 5. (You can write 'skip' to skip rating this book)\n")
+                if mark != "skip":
+                    line_books_read += input_books + ","
+                    input_books = int(input_books) -1
+                    liste_line_matrix = list(line_matrix_to_append)
+                    for i in range(len(liste_line_matrix)):
+                        if i == int(input_books)*2:
+                            liste_line_matrix[i] = mark
+                    line_matrix_to_append = "".join(liste_line_matrix)
         except:
-            if input_livres == "back":
+            if input_books == "back":
                 return None,None, None
-            elif input_livres == "exit":
+            elif input_books == "exit":
                 return 0, 0, 0
-            elif input_livres == "over":
+            elif input_books == "over":
                 appendBool = False
     line_books_read = line_books_read[0:len(line_books_read) - 1]
     line_books_read += "\n"
