@@ -265,9 +265,8 @@ def createLineReader(*pseudonym):
     # Prints every books in the file books.txt
     displayBooks()
     appendBool = True
-    # Initialize a string that we will append to the file when the user is over adding books
-    line_books_read = ""
-    line_matrix = ""
+    # Initialize two strings that we will append to the book sread and rating matrix files when the user is over adding books
+    line_books_read, line_matrix = "", ""
     # Adds the pseudonym of the user
     line_books_read += str(pseudo) + ","
     for i in range(len(books_lines)-countDeletedBooks()):
