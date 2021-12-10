@@ -1,9 +1,9 @@
 Tao, 1, 1, 2
-Gwendal, 1, 1, 4
-Ylan, 1, 1, 2
-OOOOoooooooooooo, 1, 2, 3
-fghjk, 2, 1, 1
-DFGHJK, 1, 1, 1
-dfghjkl, 1, 1, 1
-xcvbhj, 1, 1, 1
-FRQFSDQFDQS, 1, 1, 2
+Gwendal, 1, 1, 4FFFFF, 2, 2, 3
+FQFFD, 1, 1, 1
+OOooOOOoOOOOOoOOO, 2, 3, 2
+QFNKLDQFD, 1, 1, 1
+FQDFQDF, 1, 1, 1
+DQFQDFQD, 2, 3, 5
+DQDQSDQS, 1, 1, 1
+FQFQD, 1, 1, 1

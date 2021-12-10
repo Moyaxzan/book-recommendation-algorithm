@@ -247,14 +247,19 @@ def createLineReader(*pseudonym):
                     6. History
                     7. Comedy""")
         readingStyle = input()
-        if readingStyle == "back":
-            return None, None, None
-        elif readingStyle == "exit":
-            return 0, 0, 0
-        elif int(readingStyle) >= 1 and int(readingStyle) <= 7:
-            readingStylebool = False
-        else:
-            print("invalide input : you need to type a number between 1 and 7")
+        try:
+            int(readingStyle)
+            if int(readingStyle) >= 1 and int(readingStyle) <= 7:
+                readingStylebool = False
+            else:
+                print("invalide input : you need to type a number between 1 and 7")
+        except:
+            if readingStyle == "back":
+                return None, None, None
+            elif readingStyle == "exit":
+                return 0, 0, 0
+            else:
+                print("invalide input : you need to type a number between 1 and 7")
     line_reader = str(pseudo) + ", " + str(gender) + ", " + str(age) + ", " + str(readingStyle) + "\n"
     print("Which books have you read ?")
     # Prints every books in the file books.txt
@@ -277,8 +282,11 @@ def createLineReader(*pseudonym):
             int(input_livres)
             mark = input("Grade this book from 1 to 5\n")
             line_books_read += input_livres + ","
-            print("1")
-            print("2")
+            liste_line_matrix=list(line_matrix)
+            for i in range(len(liste_line_matrix)):
+                if i == int(input_livres)*2:
+                    liste_line_matrix[i] = mark
+            line_matrix_to_append = "".join(liste_line_matrix)
         except:
             if input_livres == "back":
                 return None,None, None
@@ -286,9 +294,7 @@ def createLineReader(*pseudonym):
                 return 0, 0, 0
             elif input_livres == "over":
                 appendBool = False
-        line_matrix = str(line_matrix[0:int(input_livres * 2)]) + str(mark) + " " + str(line_matrix[int(int(input_livres) * 2 + 4):len(line_matrix)])
-    # Remove the last comma to avoid having one too much
     line_books_read = line_books_read[0:len(line_books_read) - 1]
     line_books_read += "\n"
-    return line_reader, line_books_read, line_matrix
+    return line_reader, line_books_read, line_matrix_to_append
 
