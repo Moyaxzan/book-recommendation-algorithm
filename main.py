@@ -2,7 +2,7 @@ from part1 import *
 from part2 import *
 from part3 import *
 
-
+## TODO : Faire en sorte que la boucle s'arrête quand l'user a noté tout les livres qu'il a lu (rateBook())
 
 
 

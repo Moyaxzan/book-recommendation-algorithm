@@ -47,6 +47,7 @@ def menu_part1():
     else:
         return 1
 
+# This functions displays every books in "books.txt" file.
 def displayBooks(list_of_books=books_file):
     # Open the "books.txt" file
     f = open(list_of_books, "r")
@@ -59,6 +60,7 @@ def displayBooks(list_of_books=books_file):
             cpt += 1
 
 
+# This function adds a reader in "booksread.txt" and "readers.txt" files
 def addReader():
     # Open the "readers.txt" and "booksread.txt" files
     readers = open(reader_file, "a")
@@ -84,8 +86,9 @@ def addReader():
     books_read.close()
 
 
+# This function allows to view informations about a reader using its pseudonym.
 def viewReader(pseudonym):
-    # Opens the "readers.txt" and create a list of the lines
+    # Opens the "readers.txt" and create a string of the lines
     readers = open(reader_file, "r")
     readers_lines = readers.read()
     if pseudonym in readers_lines:
@@ -114,27 +117,39 @@ def viewReader(pseudonym):
         print("This pseudonym is not registered")
 
 
+# This function allows to edit a reader's profile using its pseudonym.
 def editReader(pseudonym):
-    readers = open(reader_file, "r")
-    book_reads = open(books_read_file, "r")
-    readers_lines = readers.readlines()
-    book_reads_lines = book_reads.readlines()
-    line_readers, line_books_read = createLineReader(pseudonym)
-    if line_readers == None and line_books_read == None:
-        return menu_part1()
-    elif line_readers == 0 and line_books_read == 0:
-        return 0
-    index = getIndexPseudonym(pseudonym)
-    readers_lines[index] = line_readers
-    book_reads_lines[index] = line_books_read
-    readers = open(reader_file, "w")
-    book_reads = open(books_read_file, "w")
-    readers.writelines(readers_lines)
-    book_reads.writelines(book_reads_lines)
-    readers.close()
-    book_reads.close()
+    list_of_readers=list_pseudonym()
+    if pseudonym in list_of_readers:
+        readers = open(reader_file, "r")
+        book_reads = open(books_read_file, "r")
+        matrix = open(scoring_matrix_file, "r")
+        readers_lines = readers.readlines()
+        book_reads_lines = book_reads.readlines()
+        matrix_lines = matrix.readlines()
+        line_readers, line_books_read, line_matrix = createLineReader(pseudonym)
+        if line_readers == None and line_books_read == None and line_matrix == None:
+            return menu_part1()
+        elif line_readers == 0 and line_books_read == 0 and line_matrix == 0:
+            return 0
+        index = getIndexPseudonym(pseudonym)
+        readers_lines[index] = line_readers
+        book_reads_lines[index] = line_books_read
+        matrix_lines[index] = line_matrix
+        readers = open(reader_file, "w")
+        book_reads = open(books_read_file, "w")
+        matrix = open(scoring_matrix_file, "w")
+        readers.writelines(readers_lines)
+        book_reads.writelines(book_reads_lines)
+        matrix.writelines(matrix_lines)
+        readers.close()
+        book_reads.close()
+        matrix.close()
+    else:
+        print("The user you want to edit is not registere")
 
 
+# This functions allows to delete a readers's profile using its pseudonym.
 def deleteReader(pseudonym):
     readers = open(reader_file, "r")
     book_reads = open(books_read_file, "r")
@@ -159,6 +174,8 @@ def deleteReader(pseudonym):
 
 # PART ONE SECONDARY FUNCTIONS
 
+
+# This function returns the index of a reader in "booksread.txt" and "readers.txt" using its pseudonym.
 def getIndexPseudonym(pseudonym):
     list_of_pseudonym = list_pseudonym()
     for i in range(len(list_of_pseudonym)):
@@ -167,6 +184,7 @@ def getIndexPseudonym(pseudonym):
     return index
 
 
+# This function returns a list of every pseudonym in "readers.txt".
 def list_pseudonym():
     f = open(reader_file, "r")
     cpt = 0
@@ -180,6 +198,7 @@ def list_pseudonym():
     return list_pseudonym
 
 
+# This function returns the lines to append to "books.txt", "readers.txt" and "booksread.txt" and may use a pseudonym in case it is used by editReader()
 def createLineReader(*pseudonym):
     pseudobool = True
     genderbool = True
