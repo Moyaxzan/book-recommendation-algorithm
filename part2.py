@@ -1,11 +1,16 @@
+# PART 2 : Visit the book depository, made by Gwendal HOLLOCOU and Tao SAINT PAUL AMOURDAM.
+# This file contains every functions related to the books.
+
 reader_file = "./Ressources/readers.txt"
 books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
 scoring_matrix_file = "Ressources/rating_matrix.txt"
 
 from part1 import *
+
 ###  PART TWO PRIMARY FUNCTIONS
 
+# This function allows to navigate through part2 functions
 def menu_part2():
     print("Write 1 to add a book")
     print("Write 2 to edit a book")
@@ -32,6 +37,7 @@ def menu_part2():
         return 1
 
 
+# This function allows to add a book to "books.txt".
 def addBook():
     list_of_books = open(books_file, "r")
     scoring_matrix = open(scoring_matrix_file, "r")
@@ -57,6 +63,7 @@ def addBook():
     list_of_books.write(book_to_append + "\n")
 
 
+# This function allow to edit a book in "books.txt".
 def editBook():
     list_of_books = open(books_file, "r")
     list_of_books_readlines = list_of_books.readlines()
@@ -81,6 +88,8 @@ def editBook():
     else:
         return menu_part2()
 
+
+# This function allows to delete a book from "books.txt".
 def deleteBook():
     list_of_books = open(books_file, "r")
     book_reads = open(books_read_file, "r")
@@ -119,6 +128,7 @@ def deleteBook():
 ### PART TWO SECONDARY FUNCTIONS
 
 
+# This function returns the index of a book in "books.txt" by using its name.
 def getIndexBook(book):
     list_of_books = open(books_file, "r")
     list_of_books_readlines = list_of_books.readlines()

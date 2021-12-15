@@ -1,3 +1,6 @@
+# PART 1 : Reader profiles, made by Gwendal HOLLOCOU and Tao SAINT PAUL AMOURDAM.
+# This file contains every functions related to the reader profiles.
+
 reader_file = "./Ressources/readers.txt"
 books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
@@ -8,6 +11,7 @@ from part3 import *
 
 #  PART ONE PRIMARY FUNCTIONS
 
+# This function allows to navigate through part1 functions
 def menu_part1():
     print("Write 1 to display books")
     print("Write 2 to add a reader")
