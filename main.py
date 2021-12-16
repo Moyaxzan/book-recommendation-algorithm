@@ -1,18 +1,20 @@
-from part1 import *
+# from part1 import * #TODO: is it opti ?
 from part2 import *
 from part3 import *
 
-## TODO : Faire en sorte que la boucle s'arrête quand l'user a noté tout les livres qu'il a lu (rateBook())
 
+# TODO : Faire en sorte que la boucle s'arrête quand l'user a noté tout les livres qu'il a lu (rateBook())
 
 
 if __name__ == "__main__":
     power = 1
-    print("Hi user ! don't forget, you can back at any time just by writing 'back' and exit by just writting 'exit'. Enjoy !")
+    print("Hi user ! don't forget, "
+          "you can back at any time just by writing 'back' and exit by just writting 'exit'. "
+          "Enjoy !")
     while power == 1:
-        print("Write 1 to access part1 functions")
-        print("Write 2 to access part2 functions")
-        print("Write 3 to access part3 functions")
+        print("Write 1 to access part1 (readers part)")
+        print("Write 2 to access part2 functions (books part)")
+        print("Write 3 to access part3 functions (ratings/recommendations part)")
         choice = input("What do you want to do ?\n")
         if choice == "1":
             power = menu_part1()

@@ -1,15 +1,14 @@
 # PART 1 : Reader profiles, made by Gwendal HOLLOCOU and Tao SAINT PAUL AMOURDAM.
-# This file contains every functions related to the reader profiles.
-
+# This file contains every functions related to the readers profiles.
+from part3 import *
 reader_file = "./Ressources/readers.txt"
 books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
 scoring_matrix_file = "Ressources/rating_matrix.txt"
 dicogenre = {1: "sci-fi", 2: "Biography", 3: "Horror", 4: "Romance", 5: "Fable", 6: "History", 7: "Comedy"}
 
-from part3 import *
-
 #  PART ONE PRIMARY FUNCTIONS
+
 
 # This function allows to navigate through part1 functions
 def menu_part1():
@@ -26,8 +25,8 @@ def menu_part1():
     elif choice == "2":
         power = addReader()
     elif choice == "3" or choice == "4" or choice == "5":
-        L = ["view","edit","delete"]
-        input_string = "what pseudo do you want to " + str(L[int(choice)-3]) + "? \n"
+        list_prompt = ["view", "edit", "delete"]
+        input_string = "what pseudo do you want to " + str(list_prompt[int(choice)-3]) + "? \n"
         pseudo = input(input_string)
         if pseudo == "back":
             return menu_part1()
@@ -38,7 +37,7 @@ def menu_part1():
         elif choice == "4":
             power = editReader(pseudo)
         elif choice == "5":
-            power = deleteReader(pseudo)
+            deleteReader(pseudo)
     elif choice == "back":
         return 1
     elif choice == "exit":
@@ -50,6 +49,7 @@ def menu_part1():
         return 0
     else:
         return 1
+
 
 # This functions displays every books in "books.txt" file.
 def displayBooks(list_of_books=books_file):
@@ -71,11 +71,11 @@ def addReader():
     books_read = open(books_read_file, "a")
     matrix_file = open(scoring_matrix_file, "r")
     books = open(books_file , "r")
-    books_lines=books.readlines()
-    matrix=matrix_file.readlines()
+    books_lines = books.readlines()
+    matrix = matrix_file.readlines()
     # Calls createLineReader() which create the right line to insert into "readers.txt" and "booksread.txt" files
     line_reader_file, line_books_read, line_matrix = createLineReader()
-    if line_reader_file == None and line_books_read == None and line_matrix == None:
+    if line_reader_file is None and line_books_read is None and line_matrix is None:
         return menu_part1()
     elif line_reader_file == 0 and line_books_read == 0 and line_matrix == 0:
         return 0
@@ -188,21 +188,8 @@ def getIndexPseudonym(pseudonym):
     return index
 
 
-# This function returns a list of every pseudonym in "readers.txt".
-def list_pseudonym():
-    f = open(reader_file, "r")
-    cpt = 0
-    readedFile = f.read()
-    list_pseudonym = []
-    for i in readedFile:
-        if i == "\n":
-            cpt += 1
-    for i in range(cpt):
-        list_pseudonym.append(readedFile.split("\n")[i].split(",")[0])
-    return list_pseudonym
-
-
-# This function returns the lines to append to "books.txt", "readers.txt" and "booksread.txt" and may use a pseudonym in case it is used by editReader()
+# This function returns the lines to append to "books.txt", "readers.txt" and "booksread.txt" and
+# may use a pseudonym in case it is used by editReader()
 def createLineReader(*pseudonym):
     pseudobool = True
     genderbool = True
@@ -285,10 +272,13 @@ def createLineReader(*pseudonym):
                 print("invalide input : you need to type a number between 1 and 7")
     line_reader = str(pseudo) + ", " + str(gender) + ", " + str(age) + ", " + str(readingStyle) + "\n"
     print("Which books have you read ?")
+
     # Prints every books in the file books.txt
     displayBooks()
     appendBool = True
-    # Initialize two strings that we will append to the book sread and rating matrix files when the user is over adding books
+
+    # Initialize two strings that we will append to the book sread and
+    # rating matrix files when the user is over adding books
     line_books_read, line_matrix = "", ""
     # Adds the pseudonym of the user
     line_books_read += str(pseudo) + ","
@@ -298,6 +288,7 @@ def createLineReader(*pseudonym):
         else:
             line_matrix += "0 "
     line_matrix_to_append = line_matrix
+
     # This while adds every book the user has read
     registered_book = []
     while appendBool:

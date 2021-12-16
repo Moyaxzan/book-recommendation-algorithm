@@ -5,10 +5,10 @@ reader_file = "./Ressources/readers.txt"
 books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
 scoring_matrix_file = "Ressources/rating_matrix.txt"
-
 from part1 import *
 
 ###  PART TWO PRIMARY FUNCTIONS
+
 
 # This function allows to navigate through part2 functions
 def menu_part2():
@@ -125,7 +125,7 @@ def deleteBook():
     list_of_books.writelines(list_of_books_readlines)
     book_reads.writelines(book_reads_readlines)
 
-### PART TWO SECONDARY FUNCTIONS
+# PART TWO SECONDARY FUNCTIONS
 
 
 # This function returns the index of a book in "books.txt" by using its name.

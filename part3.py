@@ -1,6 +1,7 @@
 # PART 3 : Recommendation, made by Gwendal HOLLOCOU and Tao SAINT PAUL AMOURDAM.
 # This file contains every functions related to the ratings and recommendations.
-# It has a back & exit system, using returns all along the file : basically, if a menu returns 1, it'll keep running the main.py and so the program
+# It has a back & exit system, using returns all along the file : basically,
+# If a menu returns 1, it'll keep running the main.py and so the program
 # keep going. However, if a menu returns
 
 reader_file = "./Ressources/readers.txt"
@@ -8,8 +9,8 @@ books_read_file = "./Ressources/booksread.txt"
 books_file = "./Ressources/books.txt"
 scoring_matrix_file = "Ressources/rating_matrix.txt"
 similarity_matrix_file = "Ressources/similarity_matrix.txt"
-
 # PART THREE PRIMARY FUNCTIONS
+
 
 # This function allows to navigate through part3 functions
 def menu_part3():
@@ -25,8 +26,14 @@ def menu_part3():
     elif choice == "3":
         pseudo = input("what is your pseudonym ?\n")
         while pseudo not in list_pseudonym():
+            if pseudo == 'back':
+                return menu_part3()
+            elif pseudo == 'exit':
+                return 0
             pseudo = input("what is your pseudonym ?\n")
         power = rateBook(pseudo)
+        if power == 1:
+            return menu_part3()
     elif choice == "4":
         resetSimilarityMatrix()
     if power == 0:
@@ -41,7 +48,6 @@ def resetRatingMatrix():
     matrix_lines = []
     list_of_books = open(books_file, "r")
     readers = open(reader_file, "r")
-    matrix_file = open(scoring_matrix_file, "w")
     list_of_books_lines = list_of_books.readlines()
     readers_lines = readers.readlines()
     for i in list_of_books_lines:
@@ -53,9 +59,11 @@ def resetRatingMatrix():
     writeInFileMatrix(scoring_matrix_file, matrix)
 
 
-# This function allows to rate a book using the reader's name. It may take index_book, mark and index_reader as inputs if coming
-# from addReader() since in this case it already knows which book to rate with which mark, otherwise they are defined with inputs.
-def rateBook(reader, index_book = -1, mark = -1, index_reader = -1):
+# This function allows to rate a book using the reader's name.
+# It may take index_book, mark and index_reader as inputs if coming
+# from addReader() since in this case it already knows which book to rate with which mark,
+# otherwise they are defined with inputs.
+def rateBook(reader, index_book=-1, mark=-1, index_reader=-1):
     books = open(books_file, "r")
     matrix = getScoringMatrix()
     books_lines = books.readlines()
@@ -68,10 +76,23 @@ def rateBook(reader, index_book = -1, mark = -1, index_reader = -1):
         for book in list_books_read:
             print(str(cpt+1) + ".", books_lines[int(book)])
             cpt += 1
-        num_book_to_rate = int(input("Which book do you want to rate ?\n"))
-        index_book = int(list_books_read[num_book_to_rate-1])
-        mark = int(input("Rate this book, from 1 to 5\n"))
-        while mark < 0 or mark > 5:
+
+        num_book_to_rate = input("Which book do you want to rate ?\n")
+
+        if num_book_to_rate == 'back':
+            return 1
+        elif num_book_to_rate == 'exit':
+            return 0
+
+        index_book = int(list_books_read[int(num_book_to_rate)-1])
+        mark = input("Rate this book, from 1 to 5\n")
+
+        if mark == 'back':
+            return rateBook(reader)
+        elif mark == 'exit':
+            return 0
+
+        while int(mark) < 0 or int(mark) > 5:
             mark = int(input("Rate this book, from 1 to 5\n"))
     # Insert the right mark
     matrix[index_reader][index_book - countDeletedBooks()] = str(mark)
@@ -84,12 +105,13 @@ def resetSimilarityMatrix():
     similarity_matrix = open(similarity_matrix_file, "w")
     rating_matrix = getScoringMatrix()
     books_readers_lines = books_readers.readlines()
-    ### Initializes the similarity matrix to 0s
+
+    # Initializes the similarity matrix to 0s
     similarity_matrix_to_write = [["0" for j in range(len(books_readers_lines))] for i in range(len(books_readers_lines))]
     writeInFileMatrix(similarity_matrix_file, similarity_matrix_to_write)
 
 
-### PART THREE SECONDARY FUNCTIONS
+# PART THREE SECONDARY FUNCTIONS
 
 
 # This function returns a list of every books a reader has read using its pseudonym.
@@ -114,7 +136,7 @@ def getIndexPseudonym(pseudonym):
 
 # This function allows to write in the inputted file the inputted matrix with the right format. ( 0 1 0 1 0
 #                                                                                                 1 0 1 1 1 )
-def writeInFileMatrix(file,list):
+def writeInFileMatrix(file, list):
     matrix_file = open(file, "w")
     for i in range(len(list)):
         for j in range(len(list[i])):
@@ -127,12 +149,12 @@ def writeInFileMatrix(file,list):
 
 # This function returns the number of books which are deleted in "books.txt"
 def countDeletedBooks():
-    count=0
+    count = 0
     books = open(books_file, "r")
-    books_readlines= books.readlines()
+    books_readlines = books.readlines()
     for i in books_readlines:
-        if i=="\n":
-            count+=1
+        if i == "\n":
+            count += 1
     return count
 
 
