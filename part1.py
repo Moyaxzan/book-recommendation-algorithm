@@ -277,7 +277,7 @@ def createLineReader(*pseudonym):
     displayBooks()
     appendBool = True
 
-    # Initialize two strings that we will append to the book sread and
+    # Initialize two strings that we will append to the books read and
     # rating matrix files when the user is over adding books
     line_books_read, line_matrix = "", ""
     # Adds the pseudonym of the user
@@ -300,6 +300,8 @@ def createLineReader(*pseudonym):
             else:
                 registered_book.append(input_books)
                 mark = input("Rate this book from 1 to 5. (You can write 'skip' to skip rating this book)\n")
+                while int(mark) < 0 or int(mark) > 5:
+                    mark = int(input("Rate this book, from 1 to 5\n"))
                 if mark != "skip":
                     line_books_read += input_books + ","
                     input_books = int(input_books) -1
