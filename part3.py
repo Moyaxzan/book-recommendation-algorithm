@@ -47,6 +47,8 @@ def menu_part3():
             return menu_part3()
     elif choice == "4":
         resetSimilarityMatrix()
+    elif choice == "5":
+        resetRatingMatrix()
     if power == 0:
         return 0
     else:
@@ -118,67 +120,92 @@ def recommendBook(reader):
     rating_matrix = getMatrix(scoring_matrix_file)
     books_read = reader_books(reader)
     index_reader = getIndexPseudonym(reader)
-    max_sim = 0.0
+    max_similarity = 0.0
     index_max_sim_reader = -1
     books_not_in_common = []
+
     if emptyLine(rating_matrix[index_reader]):
-        print("You must rate at least one book to get a book recommanded")
+        print("You must rate at least one book to get a book recommended")
         return 1
     for i in range(len(similarity_matrix[index_reader])):
-        j = float(similarity_matrix[index_reader][i])
-        print(i, j)
-        if j > max_sim and j != 0.0 and j != 1.0:
-            max_sim = float(j)
+        j = similarity_matrix[index_reader][i]
+        if float(j) > max_similarity and j != "0.00" and j != "1.00":
+            max_similarity = float(j)
             index_max_sim_reader = i
-        print(index_max_sim_reader, max_sim)
-    if max_sim == 0:
+    if max_similarity == 0:
         print("Sorry but you are not similar to any reader of our database...\n"
               "Maybe try to read more books in order to have some books recommended.")
         return 1
-    # Create a list with every books the maximum similary reader has read.
+
+    # Create a list with every books the maximum similar reader has read.
     books_read_max_sim = reader_books(getPseudonymIndex(index_max_sim_reader))
-    print("---------------------")
     for i in books_read_max_sim:
         if i not in books_read:
             books_not_in_common.append(i)
-    if max_sim >= 0.8:
-        print("You must like these books !")
-    elif max_sim >= 0.5:
-        print("You will probably like these books")
-    elif max_sim >= 0.3:
-        print("Maybe you will like these books")
+    if max_similarity >= 0.8:
+        print("\nYou must like these books:\n")
+    elif max_similarity >= 0.5:
+        print("\nYou will probably like these books:\n")
+    elif max_similarity >= 0.3:
+        print("\nMaybe you will like these books:\n")
     else:
-        print("You could like these books")
+        print("\nYou could like these books:\n")
+
     for k in range(len(books_not_in_common)):
-        print(str(k+1) + ".", books_not_in_common[k])
-    print("Autre reader = ", index_max_sim_reader)
-    print("Livres non in common =", books_not_in_common)
-    index_book = (input("Select a    book"))
-    while str(index_book) not in books_not_in_common:
-        if index_book == "back":
-            return 1
-        elif index_book == "exit":
-            return 0
-        index_book = int(input("Select a book"))
-    mark = input("Give this book a mark, from 1 to 5")
+        print(str(k+1) + ".", getBookwIndex(books_not_in_common[k]).rstrip("\n"))
+    selectbool = True
+    while selectbool:
+        index_book = input("\nSelect a book\n")
+        try:
+            if 1 <= int(index_book) <= len(books_not_in_common):
+                realindexbook = books_not_in_common[int(index_book)-1]
+                selectbool = False
+            else:
+                print("invalid input: your number must be greater than 1 "
+                      "and must not exceed " + str(len(books_not_in_common)))
+        except:
+            if index_book == "back":
+                return 1
+            elif index_book == "exit":
+                return 0
+            else:
+                print("invalid input")
+
+    mark = input("Give this book a mark, from 1 to 5\n")
     try:
         while int(mark) < 1 or int(mark) > 5:
-            mark = input("Give this book a mark, from 1 to 5")
+            mark = input("Give this book a mark, from 1 to 5 included\n")
     except TypeError:
         if mark == "back":
             return recommendBook(reader)
         elif mark == "exit":
             return 0
         else:
-            print("Please enter a correct mark, between 1 and 5")
-    addReadedBook(index_reader, int(index_book)-1, mark)
+            print("Please enter an integer, between 1 and 5")
+    addReadedBook(index_reader, realindexbook, mark)
+
+
+# This function stores a book and its mark given by an user in "booksread.txt" and "rating_matrix.txt"
+def addReadedBook(index_reader, index_book, mark):
+    booksread = open(books_read_file, "r")
+    scoring_matrix_lines = getMatrix(scoring_matrix_file)
+    booksread_lines = booksread.readlines()
+    booksread_lines[index_reader] = booksread_lines[index_reader].rstrip("\n")
+    booksread_lines[index_reader] += "," + str(index_book) + "\n"
+    booksread = open(books_read_file, "w")
+    booksread.writelines(booksread_lines)
+    print(index_reader, scoring_matrix_lines)
+    print(index_book, index_reader)
+    scoring_matrix_lines[index_reader][int(index_book)-1] = mark
+    writeInFileMatrix(scoring_matrix_file, scoring_matrix_lines)
+
 
 # PART THREE SECONDARY FUNCTIONS
 
 def getBookwIndex(index):
-    books_read = open(books_read_file, 'r')
-    books_read_lines = books_read.readlines()
-    return books_read_lines[index]
+    books = open(books_file, 'r')
+    books_lines = books.readlines()
+    return books_lines[int(index)-1]
 
 # This function resets the similarity matrix to its original state
 def resetSimilarityMatrix():
@@ -295,14 +322,4 @@ def getMatrix(file):
     return matrix
 
 
-# This function stores a book and its mark given by an user in "booksread.txt" and "rating_matrix.txt"
-def addReadedBook(index_reader, index_book, mark):
-    booksread = open(books_read_file, "r")
-    books = open(books_file, "r")
-    scoring_matrix = getMatrix(scoring_matrix_file)
-    books_lines = books.readlines()
-    booksread_lines = booksread.readlines()
-    booksread_lines[index_reader] += ", "+books_lines[index_book]
-    booksread = open(books_read_file, "w")
-    booksread.writelines(booksread_lines)
-    scoring_matrix[index_reader][index_book] = mark
+
