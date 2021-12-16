@@ -1,8 +1,10 @@
 # PART 3 : Recommendation, made by Gwendal HOLLOCOU and Tao SAINT PAUL AMOURDAM.
 # This file contains every functions related to the ratings and recommendations.
 # It has a back & exit system, using returns all along the file : basically,
-# If a menu returns 1, it'll keep running the main.py and so the program
-# keep going. However, if a menu returns
+# If a menu returns 1, it'll go back to run the main.py and so the program
+# keep going. However, if a menu returns 0, it'll close the whole program and end the execution.
+
+from math import sqrt
 
 reader_file = "./Ressources/readers.txt"
 books_read_file = "./Ressources/booksread.txt"
@@ -15,15 +17,13 @@ similarity_matrix_file = "Ressources/similarity_matrix.txt"
 # This function allows to navigate through part3 functions
 def menu_part3():
     print("Write 1 to reset the matrix")
-    print("Write 2 to get the matrix")
-    print("Write 3 to rate a book")
+    print("Write 2 to rate a book")
+    print("Write 3 to get recommended a book")
     choice = input("What do you want to do ?\n")
     power = 1
     if choice == "1":
         resetRatingMatrix()
     elif choice == "2":
-        getScoringMatrix()
-    elif choice == "3":
         pseudo = input("what is your pseudonym ?\n")
         while pseudo not in list_pseudonym():
             if pseudo == 'back':
@@ -32,6 +32,17 @@ def menu_part3():
                 return 0
             pseudo = input("what is your pseudonym ?\n")
         power = rateBook(pseudo)
+        if power == 1:
+            return menu_part3()
+    elif choice == "3":
+        pseudo = input("what is your pseudonym ?\n")
+        while pseudo not in list_pseudonym():
+            if pseudo == 'back':
+                return menu_part3()
+            elif pseudo == 'exit':
+                return 0
+            pseudo = input("what is your pseudonym ?\n")
+        power = recommendBook(pseudo)
         if power == 1:
             return menu_part3()
     elif choice == "4":
@@ -65,7 +76,7 @@ def resetRatingMatrix():
 # otherwise they are defined with inputs.
 def rateBook(reader, index_book=-1, mark=-1, index_reader=-1):
     books = open(books_file, "r")
-    matrix = getScoringMatrix()
+    scoring_matrix = getMatrix(scoring_matrix_file)
     books_lines = books.readlines()
     # Determine whether the function is called from addReader() or not.
     if index_book == -1:
@@ -95,24 +106,123 @@ def rateBook(reader, index_book=-1, mark=-1, index_reader=-1):
         while int(mark) < 0 or int(mark) > 5:
             mark = int(input("Rate this book, from 1 to 5\n"))
     # Insert the right mark
-    matrix[index_reader][index_book - countDeletedBooks()] = str(mark)
-    writeInFileMatrix(scoring_matrix_file, matrix)
+    scoring_matrix[index_reader][index_book - countDeletedBooks()] = str(mark)
+    writeInFileMatrix(scoring_matrix_file, scoring_matrix)
 
+
+def recommendBook(reader):
+    books = open(books_file, "r")
+    books_lines = books.readlines()
+    resetSimilarityMatrix()
+    similarity_matrix = getMatrix(similarity_matrix_file)
+    rating_matrix = getMatrix(scoring_matrix_file)
+    books_read = reader_books(reader)
+    index_reader = getIndexPseudonym(reader)
+    max_sim = 0.0
+    index_max_sim_reader = -1
+    books_not_in_common = []
+    if emptyLine(rating_matrix[index_reader]):
+        print("You must rate at least one book to get a book recommanded")
+        return 1
+    for i in range(len(similarity_matrix[index_reader])):
+        j = float(similarity_matrix[index_reader][i])
+        print(i, j)
+        if j > max_sim and j != 0.0 and j != 1.0:
+            max_sim = float(j)
+            index_max_sim_reader = i
+        print(index_max_sim_reader, max_sim)
+    if max_sim == 0:
+        print("Sorry but you are not similar to any reader of our database...\n"
+              "Maybe try to read more books in order to have some books recommended.")
+        return 1
+    # Create a list with every books the maximum similary reader has read.
+    books_read_max_sim = reader_books(getPseudonymIndex(index_max_sim_reader))
+    print("---------------------")
+    for i in books_read_max_sim:
+        if i not in books_read:
+            books_not_in_common.append(i)
+    if max_sim >= 0.8:
+        print("You must like these books !")
+    elif max_sim >= 0.5:
+        print("You will probably like these books")
+    elif max_sim >= 0.3:
+        print("Maybe you will like these books")
+    else:
+        print("You could like these books")
+    for k in range(len(books_not_in_common)):
+        print(str(k+1) + ".", books_not_in_common[k])
+    print("Autre reader = ", index_max_sim_reader)
+    print("Livres non in common =", books_not_in_common)
+    index_book = (input("Select a    book"))
+    while str(index_book) not in books_not_in_common:
+        if index_book == "back":
+            return 1
+        elif index_book == "exit":
+            return 0
+        index_book = int(input("Select a book"))
+    mark = input("Give this book a mark, from 1 to 5")
+    try:
+        while int(mark) < 1 or int(mark) > 5:
+            mark = input("Give this book a mark, from 1 to 5")
+    except TypeError:
+        if mark == "back":
+            return recommendBook(reader)
+        elif mark == "exit":
+            return 0
+        else:
+            print("Please enter a correct mark, between 1 and 5")
+    addReadedBook(index_reader, int(index_book)-1, mark)
+
+# PART THREE SECONDARY FUNCTIONS
+
+def getBookwIndex(index):
+    books_read = open(books_read_file, 'r')
+    books_read_lines = books_read.readlines()
+    return books_read_lines[index]
 
 # This function resets the similarity matrix to its original state
 def resetSimilarityMatrix():
     books_readers = open(books_read_file, "r")
     similarity_matrix = open(similarity_matrix_file, "w")
-    rating_matrix = getScoringMatrix()
+    rating_matrix = getMatrix(scoring_matrix_file)
     books_readers_lines = books_readers.readlines()
-
     # Initializes the similarity matrix to 0s
     similarity_matrix_to_write = [["0" for j in range(len(books_readers_lines))] for i in range(len(books_readers_lines))]
+    similarity_matrix.close()
+    for i in range(len(similarity_matrix_to_write[0])):
+        for j in range(len(similarity_matrix_to_write[0])):
+            if similarity_matrix_to_write[i][j] == "0":
+                if i == j:
+                    res = "1.00"
+                elif not emptyLine(rating_matrix[i]) and not emptyLine(rating_matrix[j]):
+                    res = round(float(cosineSimilarity(rating_matrix[i],rating_matrix[j])),2)
+                    if res == 0.0:
+                        res = "0.00"
+                else:
+                    res = "0.00"
+                similarity_matrix_to_write[i][j], similarity_matrix_to_write[j][i] = str(res), str(res)
     writeInFileMatrix(similarity_matrix_file, similarity_matrix_to_write)
 
 
-# PART THREE SECONDARY FUNCTIONS
+# This function computes the cosine similarity between two readers
+def cosineSimilarity(notes1, notes2):
+    numerator = 0
+    norm1 = 0
+    norm2 = 0
+    for i in range(len(notes1)):
+        numerator += (int(notes1[i]) * int(notes2[i]))
+        norm1 += int(notes1[i]) ** 2
+        norm2 += int(notes2[i]) ** 2
+    res = numerator / (sqrt(norm1) * sqrt(norm2))
+    return res
 
+
+# This function will check if a list contains only zero. It returns True if a reader has not rated any books
+def emptyLine(line):
+    for i in line:
+        if i != "0":
+            return False
+    return True
 
 # This function returns a list of every books a reader has read using its pseudonym.
 def reader_books(reader):
@@ -133,6 +243,9 @@ def getIndexPseudonym(pseudonym):
             index = i
     return index
 
+def getPseudonymIndex(index):
+    list_of_pseudonym = list_pseudonym()
+    return list_of_pseudonym[index]
 
 # This function allows to write in the inputted file the inputted matrix with the right format. ( 0 1 0 1 0
 #                                                                                                 1 0 1 1 1 )
@@ -173,10 +286,23 @@ def list_pseudonym():
 
 
 # This function allows to retrieve the matrix inside a variable of type list from the "rating_matrix.txt" file.
-def getScoringMatrix():
-    matrix_file = open(scoring_matrix_file, "r")
+def getMatrix(file):
+    matrix_file = open(file, "r")
     matrix = []
     matrix_to_append = matrix_file.readlines()
     for i in matrix_to_append:
         matrix.append(i.replace("\n", "").split(" "))
     return matrix
+
+
+# This function stores a book and its mark given by an user in "booksread.txt" and "rating_matrix.txt"
+def addReadedBook(index_reader, index_book, mark):
+    booksread = open(books_read_file, "r")
+    books = open(books_file, "r")
+    scoring_matrix = getMatrix(scoring_matrix_file)
+    books_lines = books.readlines()
+    booksread_lines = booksread.readlines()
+    booksread_lines[index_reader] += ", "+books_lines[index_book]
+    booksread = open(books_read_file, "w")
+    booksread.writelines(booksread_lines)
+    scoring_matrix[index_reader][index_book] = mark
