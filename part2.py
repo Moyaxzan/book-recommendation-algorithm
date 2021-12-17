@@ -124,6 +124,7 @@ def deleteBook():
     scoring_matrix.writelines(scoring_matrix_lines)
     list_of_books.writelines(list_of_books_readlines)
     book_reads.writelines(book_reads_readlines)
+    resetSimilarityMatrix()
 
 # PART TWO SECONDARY FUNCTIONS
 

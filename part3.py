@@ -216,13 +216,13 @@ def resetSimilarityMatrix():
     # Initializes the similarity matrix to 0s
     similarity_matrix_to_write = [["0" for j in range(len(books_readers_lines))] for i in range(len(books_readers_lines))]
     similarity_matrix.close()
-    for i in range(len(similarity_matrix_to_write[0])):
-        for j in range(len(similarity_matrix_to_write[0])):
+    for i in range(len(similarity_matrix_to_write)):
+        for j in range(len(similarity_matrix_to_write)):
             if similarity_matrix_to_write[i][j] == "0":
                 if i == j:
                     res = "1.00"
                 elif not emptyLine(rating_matrix[i]) and not emptyLine(rating_matrix[j]):
-                    res = round(float(cosineSimilarity(rating_matrix[i],rating_matrix[j])),2)
+                    res = round(float(cosineSimilarity(rating_matrix[i], rating_matrix[j])), 2)
                     if res == 0.0:
                         res = "0.00"
                 else:

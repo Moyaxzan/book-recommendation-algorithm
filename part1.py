@@ -88,6 +88,7 @@ def addReader():
     matrix_file.close()
     readers.close()
     books_read.close()
+    resetSimilarityMatrix()
 
 
 # This function allows to view informations about a reader using its pseudonym.
@@ -149,6 +150,7 @@ def editReader(pseudonym):
         readers.close()
         book_reads.close()
         matrix.close()
+        resetSimilarityMatrix()
     else:
         print("The user you want to edit is not registere")
 
@@ -174,6 +176,7 @@ def deleteReader(pseudonym):
     scoring_matrix.close()
     readers.close()
     book_reads.close()
+    resetSimilarityMatrix()
 
 
 # PART ONE SECONDARY FUNCTIONS
@@ -319,5 +322,6 @@ def createLineReader(*pseudonym):
                 appendBool = False
     line_books_read = line_books_read[0:len(line_books_read) - 1]
     line_books_read += "\n"
+    print("You successfully registered.\n")
     return line_reader, line_books_read, line_matrix_to_append
 
