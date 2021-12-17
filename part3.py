@@ -223,6 +223,7 @@ def resetSimilarityMatrix():
                     res = "1.00"
                 elif not emptyLine(rating_matrix[i]) and not emptyLine(rating_matrix[j]):
                     res = round(float(cosineSimilarity(rating_matrix[i], rating_matrix[j])), 2)
+                    res = ("%.2f" % res)
                     if res == 0.0:
                         res = "0.00"
                 else:
