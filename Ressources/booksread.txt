@@ -6,3 +6,4 @@ Paul,1,2
 Walid,1,3
 Elene ,2,3
 Raphayel,1,3
+Bruce,1,3,4
