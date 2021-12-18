@@ -123,7 +123,7 @@ def viewReader(pseudonym):
 # This function allows to edit a reader's profile using its pseudonym.
 def editReader(pseudonym):
     # We get a list of every registered readers to make sure we can edit the given pseudonym.
-    list_of_readers=list_pseudonym()
+    list_of_readers = list_pseudonym()
     if pseudonym in list_of_readers:
         # We open every files we will edit to stock their values in lists.
         readers = open(reader_file, "r")
@@ -136,7 +136,7 @@ def editReader(pseudonym):
         # by using createLineReader() with a inputted pseudonym, which allow the user to keep the same pseudonym.
         line_readers, line_books_read, line_matrix = createLineReader(pseudonym)
         # This is to manage the case where the user used "back" (None) or "exit" (0).
-        if line_readers == None and line_books_read == None and line_matrix == None:
+        if line_readers is None and line_books_read is None and line_matrix is None:
             return menu_part1()
         elif line_readers == 0 and line_books_read == 0 and line_matrix == 0:
             return 0
@@ -208,7 +208,7 @@ def getIndexPseudonym(pseudonym):
 # This function returns the lines to append to "books.txt", "readers.txt" and "booksread.txt" and
 # may use a pseudonym in case it is used by editReader()
 # In this function, the back/exit system is particular since the function is called by addReader() or editReader(),
-# this is why we return "None, None, None" and "0, 0, 0", these returns are being directly managed by the caller of the function.
+# it's why we return "None, None, None" or "0, 0, 0", these are being directly handled by the caller of the function.
 # All along the function, there is a try/except system which is used to know if the user inputs a number as asked or
 # if he inputs "back" or "exit", in order to execute what the user wants to do.
 def createLineReader(*pseudonym):
@@ -231,10 +231,10 @@ def createLineReader(*pseudonym):
         else:
             print("invalide input : your pseudonym must exceed 2 characters and must not contain special characters.")
             pseudobool = True
-        # This "if" block is to prevent a user from putting a name already registered, instead if a user editing his own profile wants
-        # to keep the same name. This is done by using a variable argument "*pseudonym" in the call of the function.
+        # This block prevents a user from putting a name already registered, instead if a user editing his own profile
+        # wants to keep his name. This is done by using a variable argument "*pseudonym" in the call of the function.
         if pseudo not in list_pseudonyms:
-            if not pseudobool :
+            if not pseudobool:
                 pseudobool = False
         elif pseudonym != ():
             if pseudonym[0] == pseudo:
@@ -330,7 +330,7 @@ def createLineReader(*pseudonym):
                     # We have to do this because we print to the user the books with indexes from 1 to X,
                     # but they go from 0 to X-1 in python so we need to substract one from his input to get
                     # the right index.
-                    input_books = int(input_books) -1
+                    input_books = int(input_books) - 1
                     # Create a list from the string we will append to the scoring matrix in order to edit it simplier.
                     liste_line_matrix = list(line_matrix_to_append)
                     for i in range(len(liste_line_matrix)):
@@ -341,7 +341,7 @@ def createLineReader(*pseudonym):
                     line_matrix_to_append = "".join(liste_line_matrix)
         except:
             if input_books == "back":
-                return None,None, None
+                return None, None, None
             elif input_books == "exit":
                 return 0, 0, 0
             elif input_books == "over":
@@ -356,4 +356,3 @@ def createLineReader(*pseudonym):
     print("You successfully registered.\n")
     # Returns every lines we just created so addReader() and editReader() can add them.
     return line_reader, line_books_read, line_matrix_to_append
-
