@@ -27,5 +27,3 @@ if __name__ == "__main__":
         elif choice == "exit":
             power = 0
     print("\nHope you enjoyed ! Bye !")
-
-

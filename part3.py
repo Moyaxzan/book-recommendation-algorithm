@@ -113,8 +113,6 @@ def rateBook(reader, index_book=-1, mark=-1, index_reader=-1):
 
 
 def recommendBook(reader):
-    books = open(books_file, "r")
-    books_lines = books.readlines()
     resetSimilarityMatrix()
     similarity_matrix = getMatrix(similarity_matrix_file)
     rating_matrix = getMatrix(scoring_matrix_file)
@@ -207,6 +205,7 @@ def getBookwIndex(index):
     books_lines = books.readlines()
     return books_lines[int(index)-1]
 
+
 # This function resets the similarity matrix to its original state
 def resetSimilarityMatrix():
     books_readers = open(books_read_file, "r")
@@ -214,7 +213,9 @@ def resetSimilarityMatrix():
     rating_matrix = getMatrix(scoring_matrix_file)
     books_readers_lines = books_readers.readlines()
     # Initializes the similarity matrix to 0s
-    similarity_matrix_to_write = [["0" for j in range(len(books_readers_lines))] for i in range(len(books_readers_lines))]
+    similarity_matrix_to_write = \
+        [["0" for j in range(len(books_readers_lines))] for i in range(len(books_readers_lines))]
+
     similarity_matrix.close()
     for i in range(len(similarity_matrix_to_write)):
         for j in range(len(similarity_matrix_to_write)):
@@ -252,6 +253,7 @@ def emptyLine(line):
             return False
     return True
 
+
 # This function returns a list of every books a reader has read using its pseudonym.
 def reader_books(reader):
     books_read = open(books_read_file, "r")
@@ -271,20 +273,22 @@ def getIndexPseudonym(pseudonym):
             index = i
     return index
 
+
 def getPseudonymIndex(index):
     list_of_pseudonym = list_pseudonym()
     return list_of_pseudonym[index]
 
+
 # This function allows to write in the inputted file the inputted matrix with the right format. ( 0 1 0 1 0
 #                                                                                                 1 0 1 1 1 )
-def writeInFileMatrix(file, list):
+def writeInFileMatrix(file, lst):
     matrix_file = open(file, "w")
-    for i in range(len(list)):
-        for j in range(len(list[i])):
-            if j == len(list[i]) - 1:
-                matrix_file.write(list[i][j])
+    for i in range(len(lst)):
+        for j in range(len(lst[i])):
+            if j == len(lst[i]) - 1:
+                matrix_file.write(lst[i][j])
             else:
-                matrix_file.write(list[i][j] + " ")
+                matrix_file.write(lst[i][j] + " ")
         matrix_file.write("\n")
 
 
@@ -304,13 +308,13 @@ def list_pseudonym():
     f = open(reader_file, "r")
     cpt = 0
     readedFile = f.read()
-    list_pseudonym = []
+    lst_pseudonym = []
     for i in readedFile:
         if i == "\n":
             cpt += 1
     for i in range(cpt):
-        list_pseudonym.append(readedFile.split("\n")[i].split(",")[0])
-    return list_pseudonym
+        lst_pseudonym.append(readedFile.split("\n")[i].split(",")[0])
+    return lst_pseudonym
 
 
 # This function allows to retrieve the matrix inside a variable of type list from the "rating_matrix.txt" file.

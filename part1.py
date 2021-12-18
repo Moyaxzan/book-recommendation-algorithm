@@ -76,7 +76,8 @@ def addReader():
         return menu_part1()
     elif line_reader_file == 0 and line_books_read == 0 and line_matrix == 0:
         return 0
-    # Write into "readers.txt", "booksread.txt" and "rating_matrix.txt" the lines we just created then we close the files.
+    # Write into "readers.txt", "booksread.txt" and "rating_matrix.txt" the lines we just created
+    # then we close the files.
     readers.write(line_reader_file)
     books_read.write(line_books_read)
     matrix_file.write(line_matrix)
@@ -139,14 +140,14 @@ def editReader(pseudonym):
             return menu_part1()
         elif line_readers == 0 and line_books_read == 0 and line_matrix == 0:
             return 0
-        # We then get the right index of the pseudonym to be able to modify every list we created at the index of the reader with
-        # the new lines we just got from createLineReader()
+        # We then get the right index of the pseudonym to be able to modify every list
+        # we created at the index of the reader with the new lines we just got from createLineReader()
         index = getIndexPseudonym(pseudonym)
         readers_lines[index] = line_readers
         book_reads_lines[index] = line_books_read
         matrix_lines[index] = line_matrix
-        # Then we once again open every files we are editing in write mode, write the same lines as they had before but with
-        # the correct one edited and close them.
+        # Then we once again open every files we are editing in write mode,
+        # write the same lines as they had before but with the correct one edited and close them.
         readers = open(reader_file, "w")
         book_reads = open(books_read_file, "w")
         matrix = open(scoring_matrix_file, "w")
@@ -282,7 +283,7 @@ def createLineReader(*pseudonym):
         readingStyle = input()
         try:
             int(readingStyle)
-            if int(readingStyle) >= 1 and int(readingStyle) <= 7:
+            if 1 <= int(readingStyle) <= 7:
                 readingStylebool = False
             else:
                 print("invalide input : you need to type a number between 1 and 7")

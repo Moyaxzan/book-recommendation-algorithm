@@ -1,11 +1,11 @@
 # PART 2 : Visit the book depository, made by Gwendal HOLLOCOU and Tao SAINT PAUL AMOURDAM.
 # This file contains every functions related to the books.
+from part1 import *
 
 reader_file = "Resources/readers.txt"
 books_read_file = "Resources/booksread.txt"
 books_file = "Resources/books.txt"
 scoring_matrix_file = "Resources/rating_matrix.txt"
-from part1 import *
 
 #  PART TWO PRIMARY FUNCTIONS
 
@@ -18,7 +18,6 @@ def menu_part2():
     print("Write 3 to delete a book")
     print("Write 'back' to return to the last menu")
     choice = input("What do you want to do ?\n")
-    power = 1
     if choice == "1":
         power = addBook()
     elif choice == "2":
@@ -54,7 +53,8 @@ def addBook():
         return menu_part2()
     elif book_to_append == "exit":
         return 0
-    # Removes the "\n" at the end of every lines of "rating_matrix.txt", then append a zero with "\n" at the end of each lines
+    # Removes the "\n" at the end of every lines of "rating_matrix.txt",
+    # then append a zero with "\n" at the end of each lines
     # (which basically create a new column). We then appends the name of the new book at the end of "books.txt".
     for cpt in range(len(matrix_lines)):
         line = matrix_lines[cpt].rstrip()
@@ -74,10 +74,13 @@ def editBook():
     backbool = True
     displayBooks()
     book_to_edit = input("Which book do you want to edit ? Write 'back' to go back.\n")
+
     # Check if the book indeed exists and manage "back" & "exit" inputs.
-    while book_to_edit not in [x.replace('\n', '') for x in list_of_books_readlines] and book_to_edit != "back" and book_to_edit != "exit":
+    while book_to_edit not in [x.replace('\n', '') for x in list_of_books_readlines] \
+            and book_to_edit != "back" and book_to_edit != "exit":
         print("The book is not in the list")
         book_to_edit = input("Which book do you want to edit ? Write 'back' to go back.\n")
+
     if book_to_edit != "back" and book_to_edit != "exit":
         new_name_book = input("What is the new name of the book ? Write 'back' to go back.\n")
     if new_name_book == "back" or book_to_edit == "back":
@@ -117,13 +120,13 @@ def deleteBook():
     index = getIndexBook(book_to_delete)
     for i in range(len(book_reads_readlines)):
         if str(index) in book_reads_readlines[i]:
-            book_reads_readlines[i]=book_reads_readlines[i].replace(","+str(index),"")
+            book_reads_readlines[i] = book_reads_readlines[i].replace(","+str(index), "")
     for i in range(len(scoring_matrix_lines)):
         line = scoring_matrix_lines[i][0:index*2] + scoring_matrix_lines[i][index*2+2:len(scoring_matrix_lines[i])]
         scoring_matrix_lines[i] = line
     list_of_books_readlines[index] = "\n"
     list_of_books = open(books_file, "w")
-    book_reads = open(books_read_file,"w")
+    book_reads = open(books_read_file, "w")
     scoring_matrix = open(scoring_matrix_file, "w")
     scoring_matrix.writelines(scoring_matrix_lines)
     list_of_books.writelines(list_of_books_readlines)
@@ -142,4 +145,3 @@ def getIndexBook(book):
         if list_of_books_readlines[i].replace("\n", "") == book:
             index = i
     return index
-
