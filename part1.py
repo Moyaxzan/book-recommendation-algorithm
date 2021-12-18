@@ -1,10 +1,10 @@
 # PART 1 : Reader profiles, made by Gwendal HOLLOCOU and Tao SAINT PAUL AMOURDAM.
 # This file contains every functions related to the readers profiles.
 from part3 import *
-reader_file = "./Ressources/readers.txt"
-books_read_file = "./Ressources/booksread.txt"
-books_file = "./Ressources/books.txt"
-scoring_matrix_file = "Ressources/rating_matrix.txt"
+reader_file = "Resources/readers.txt"
+books_read_file = "Resources/booksread.txt"
+books_file = "Resources/books.txt"
+scoring_matrix_file = "Resources/rating_matrix.txt"
 dicogenre = {1: "sci-fi", 2: "Biography", 3: "Horror", 4: "Romance", 5: "Fable", 6: "History", 7: "Comedy"}
 
 #  PART ONE PRIMARY FUNCTIONS
@@ -336,7 +336,7 @@ def createLineReader(*pseudonym):
                         # We multiply the input by 2 because there are spaces (" ") in the scoring matrix.
                         if i == int(input_books)*2:
                             liste_line_matrix[i] = mark
-                    # Retrives a string from what we just done to put the mark at the good spot in the list.
+                    # Retrieves a string from what we just done to put the mark at the good spot in the list.
                     line_matrix_to_append = "".join(liste_line_matrix)
         except:
             if input_books == "back":

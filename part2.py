@@ -1,10 +1,10 @@
 # PART 2 : Visit the book depository, made by Gwendal HOLLOCOU and Tao SAINT PAUL AMOURDAM.
 # This file contains every functions related to the books.
 
-reader_file = "./Ressources/readers.txt"
-books_read_file = "./Ressources/booksread.txt"
-books_file = "./Ressources/books.txt"
-scoring_matrix_file = "Ressources/rating_matrix.txt"
+reader_file = "Resources/readers.txt"
+books_read_file = "Resources/booksread.txt"
+books_file = "Resources/books.txt"
+scoring_matrix_file = "Resources/rating_matrix.txt"
 from part1 import *
 
 ###  PART TWO PRIMARY FUNCTIONS

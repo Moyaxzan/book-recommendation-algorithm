@@ -6,11 +6,11 @@
 
 from math import sqrt
 
-reader_file = "./Ressources/readers.txt"
-books_read_file = "./Ressources/booksread.txt"
-books_file = "./Ressources/books.txt"
-scoring_matrix_file = "Ressources/rating_matrix.txt"
-similarity_matrix_file = "Ressources/similarity_matrix.txt"
+reader_file = "Resources/readers.txt"
+books_read_file = "Resources/booksread.txt"
+books_file = "Resources/books.txt"
+scoring_matrix_file = "Resources/rating_matrix.txt"
+similarity_matrix_file = "Resources/similarity_matrix.txt"
 # PART THREE PRIMARY FUNCTIONS
 
 
