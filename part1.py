@@ -69,21 +69,16 @@ def addReader():
     # Open the "readers.txt" and "booksread.txt" files
     readers = open(reader_file, "a")
     books_read = open(books_read_file, "a")
-    matrix_file = open(scoring_matrix_file, "r")
-    books = open(books_file , "r")
-    books_lines = books.readlines()
-    matrix = matrix_file.readlines()
+    matrix_file = open(scoring_matrix_file, "a")
     # Calls createLineReader() which create the right line to insert into "readers.txt" and "booksread.txt" files
     line_reader_file, line_books_read, line_matrix = createLineReader()
     if line_reader_file is None and line_books_read is None and line_matrix is None:
         return menu_part1()
     elif line_reader_file == 0 and line_books_read == 0 and line_matrix == 0:
         return 0
-    # Write into "readers.txt" and "booksread.txt" the lines we just created
+    # Write into "readers.txt", "booksread.txt" and "rating_matrix.txt" the lines we just created then we close the files.
     readers.write(line_reader_file)
     books_read.write(line_books_read)
-    matrix_file.close()
-    matrix_file = open(scoring_matrix_file, "a")
     matrix_file.write(line_matrix)
     matrix_file.close()
     readers.close()
@@ -96,6 +91,7 @@ def viewReader(pseudonym):
     # Opens the "readers.txt" and create a string of the lines
     readers = open(reader_file, "r")
     readers_lines = readers.read()
+    # We check if the inputted pseudonym is registered in order to print its informations.
     if pseudonym in readers_lines:
         readers_line_splitted = readers_lines.split("\n")
         for cpt in range(len(readers_line_splitted)):
@@ -116,6 +112,7 @@ def viewReader(pseudonym):
                     agestr = "is between 18 and 25 years old"
                 else:
                     agestr = "is more than 25 years old"
+                # This gets the right genre from the number in the reader's profile
                 genre = dicogenre[int(lineSplited[3])]
                 print(lineSplited[0], genderstr, pronoun, agestr, "and likes", genre, "books.")
     else:
@@ -148,7 +145,8 @@ def editReader(pseudonym):
         readers_lines[index] = line_readers
         book_reads_lines[index] = line_books_read
         matrix_lines[index] = line_matrix
-        # Then we once again open every files we are editing in write mode, which
+        # Then we once again open every files we are editing in write mode, write the same lines as they had before but with
+        # the correct one edited and close them.
         readers = open(reader_file, "w")
         book_reads = open(books_read_file, "w")
         matrix = open(scoring_matrix_file, "w")
