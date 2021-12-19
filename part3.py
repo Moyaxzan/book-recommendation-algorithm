@@ -94,36 +94,42 @@ def rateBook(reader, index_book=-1, mark=-1, index_reader=-1):
             mark = int(input("Rate this book, from 1 to 5\n"))
 
         index_book = int(list_books_read[int(num_book_to_rate) - 1])
-    # Insert the right mark
+    # Insert the right mark in "rating_matrix.txt"
     scoring_matrix[index_reader][index_book - countDeletedBooks()] = str(mark)
     writeInFileMatrix(scoring_matrix_file, scoring_matrix)
 
 
 def recommendBook(reader):
+    # Computes the similarity matrix with the ratings from "rating_matrix.txt"
     resetSimilarityMatrix()
     similarity_matrix = getMatrix(similarity_matrix_file)
     rating_matrix = getMatrix(scoring_matrix_file)
 
+    # Get the indexes of the reader and the books he has read
     books_read = reader_books(reader)
     index_reader = getIndexPseudonym(reader)
     max_similarity = 0.0
     index_max_sim_reader = -1
     books_not_in_common = []
 
+    # If you didn't rate any books, you can't be similar to anyone so we avoid this case to happen.
     if emptyLine(rating_matrix[index_reader]):
         print("You must rate at least one book to get a book recommended")
         return 1
+    # We look in the similarity_matrix to find another user with who the user is similar, and store that reader's
+    # index and the score of similarity between the user and the reader.
     for i in range(len(similarity_matrix[index_reader])):
         j = similarity_matrix[index_reader][i]
         if float(j) > max_similarity and j != "0.00" and j != "1.00":
             max_similarity = float(j)
             index_max_sim_reader = i
+    # If the maximum similarity found by the function stays at 0, it means that no one has read the same books as you.
     if max_similarity == 0:
         print("Sorry but you are not similar to any reader of our database...\n"
               "Maybe try to read more books in order to have some books recommended.")
         return 1
 
-    # Create a list with every books the maximum similar reader has read.
+    # Create a list with every books the maximum similar reader has read that the user didn't read.
     books_read_max_sim = reader_books(getPseudonymIndex(index_max_sim_reader))
     for i in books_read_max_sim:
         if i not in books_read:
@@ -137,9 +143,11 @@ def recommendBook(reader):
     else:
         print("\nYou could like these books:\n")
 
+    # Prints every books of the list we just created.
     for k in range(len(books_not_in_common)):
         print(str(k+1) + ".", getBookWithIndex(books_not_in_common[k]).rstrip("\n"))
     selectbool = True
+    # This "while" allow the user to select a book as read, and so add it to "booksread.txt" and "rating_matrix.txt"
     while selectbool:
         index_book = input("\nSelect a book\n")
         try:
@@ -157,6 +165,7 @@ def recommendBook(reader):
             else:
                 print("invalid input")
 
+    # Get a mark from the user for the book he just selected
     mark = input("Give this book a mark, from 1 to 5\n")
     try:
         while int(mark) < 1 or int(mark) > 5:
@@ -168,6 +177,7 @@ def recommendBook(reader):
             return 0
         else:
             print("Please enter an integer, between 1 and 5")
+    # This subfunction is writing in "booksread.txt" and "rating_matrix" the information needed
     addReadBook(index_reader, realindexbook, mark)
 
 
@@ -189,9 +199,9 @@ def addReadBook(index_reader, index_book, mark):
 
 
 # PART THREE SECONDARY FUNCTIONS
+
+
 # This function resets the matrix to its original state.
-
-
 def resetRatingMatrix():
     matrix_columns = []
     matrix_lines = []
@@ -200,15 +210,18 @@ def resetRatingMatrix():
     list_of_books_lines = list_of_books.readlines()
     readers_lines = readers.readlines()
 
+    # These for computes how many lines (number of users) and columns (number of books) is needed in "rating_matrix.txt"
     for i in list_of_books_lines:
         if i != "\n":
             matrix_columns.append(i)
     for i in readers_lines:
         matrix_lines.append(str(i)[:-1])
+
     matrix = [["0" for j in range(len(matrix_columns))] for i in range(len(matrix_lines))]
     writeInFileMatrix(scoring_matrix_file, matrix)
 
 
+# This function returns the name of a book from its index.
 def getBookWithIndex(index):
     books = open(books_file, 'r')
     books_lines = books.readlines()

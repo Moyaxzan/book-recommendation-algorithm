@@ -6,6 +6,3 @@ Lecteur_assidu,1,1,3
 haripoteur,3,2,5
 Lili,2,2,2
 ArchiBald_fx,1,3,4
-Tao,1,1,5
-Gwendal,1,1,1
-Ylan,1,1,1
