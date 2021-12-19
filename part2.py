@@ -49,7 +49,7 @@ def addBook():
     matrix_lines = scoring_matrix.readlines()
     list_of_books_readlines = list_of_books.readlines()
 
-    # Receive
+    # Receive the user input and check the book isn't already in "books.txt"
     book_to_append = input("What book do you want to add ?\n")
     while book_to_append in [x.replace('\n', '') for x in list_of_books_readlines]:
         print("The book is already in the list\n")
