@@ -17,14 +17,11 @@ similarity_matrix_file = "Resources/similarity_matrix.txt"
 
 # This function allows to navigate through part3 functions
 def menu_part3():
-    print("Write 1 to reset the matrix")
-    print("Write 2 to rate a book")
-    print("Write 3 to get recommended a book")
+    print("Write 1 to rate a book")
+    print("Write 2 to get recommended a book")
     choice = input("What do you want to do ?\n")
     power = 1
     if choice == "1":
-        resetRatingMatrix()
-    elif choice == "2":
         pseudo = input("what is your pseudonym ?\n")
         while pseudo not in list_pseudonym():
             if pseudo == 'back':
@@ -35,7 +32,7 @@ def menu_part3():
         power = rateBook(pseudo)
         if power == 1:
             return menu_part3()
-    elif choice == "3":
+    elif choice == "2":
         pseudo = input("what is your pseudonym ?\n")
         while pseudo not in list_pseudonym():
             if pseudo == 'back':
@@ -46,10 +43,10 @@ def menu_part3():
         power = recommendBook(pseudo)
         if power == 1:
             return menu_part3()
-    elif choice == "4":
-        resetSimilarityMatrix()
-    elif choice == "5":
+    elif choice == "reset_scoring":
         resetRatingMatrix()
+    elif choice == "reset_similarity":
+        resetSimilarityMatrix()
     if power == 0:
         return 0
     else:
@@ -68,6 +65,7 @@ def rateBook(reader, index_book=-1, mark=-1, index_reader=-1):
     if index_book == -1:
         index_reader = getIndexPseudonym(reader)
         list_books_read = reader_books(reader)
+
         cpt = 0
         # Display every books to allow the reader
         for book in list_books_read:
@@ -75,22 +73,21 @@ def rateBook(reader, index_book=-1, mark=-1, index_reader=-1):
             cpt += 1
 
         num_book_to_rate = input("Which book do you want to rate ?\n")
-
         if num_book_to_rate == 'back':
             return 1
         elif num_book_to_rate == 'exit':
             return 0
 
-        index_book = int(list_books_read[int(num_book_to_rate)-1])
-        mark = input("Rate this book, from 1 to 5\n")
 
+        mark = input("Rate this book, from 1 to 5\n")
         if mark == 'back':
             return rateBook(reader)
         elif mark == 'exit':
             return 0
-
         while int(mark) < 0 or int(mark) > 5:
             mark = int(input("Rate this book, from 1 to 5\n"))
+
+        index_book = int(list_books_read[int(num_book_to_rate) - 1])
     # Insert the right mark
     scoring_matrix[index_reader][index_book - countDeletedBooks()] = str(mark)
     writeInFileMatrix(scoring_matrix_file, scoring_matrix)

@@ -19,7 +19,7 @@ if __name__ == "__main__":
         elif choice == "3":
             power = menu_part3()
         elif choice == "back":
-            print("you cannot go back from here. \n")
+            print("You cannot go back from here. \n")
         elif choice == "exit":
             power = 0
     print("\nHope you enjoyed ! Bye !")
