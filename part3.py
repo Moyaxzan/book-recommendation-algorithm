@@ -4,6 +4,7 @@
 # If a menu returns 1, it'll go back to run the main.py and so the program
 # keep going. However, if a menu returns 0, it'll close the whole program and end the execution.
 
+# We use sqrt for the Cosine Similarity
 from math import sqrt
 
 reader_file = "Resources/readers.txt"
@@ -53,23 +54,6 @@ def menu_part3():
         return 0
     else:
         return 1
-
-
-# This function resets the matrix to its original state.
-def resetRatingMatrix():
-    matrix_columns = []
-    matrix_lines = []
-    list_of_books = open(books_file, "r")
-    readers = open(reader_file, "r")
-    list_of_books_lines = list_of_books.readlines()
-    readers_lines = readers.readlines()
-    for i in list_of_books_lines:
-        if i != "\n":
-            matrix_columns.append(i)
-    for i in readers_lines:
-        matrix_lines.append(str(i)[:-1])
-    matrix = [["0" for j in range(len(matrix_columns))] for i in range(len(matrix_lines))]
-    writeInFileMatrix(scoring_matrix_file, matrix)
 
 
 # This function allows to rate a book using the reader's name.
@@ -199,6 +183,24 @@ def addReadedBook(index_reader, index_book, mark):
 
 
 # PART THREE SECONDARY FUNCTIONS
+# This function resets the matrix to its original state.
+
+
+def resetRatingMatrix():
+    matrix_columns = []
+    matrix_lines = []
+    list_of_books = open(books_file, "r")
+    readers = open(reader_file, "r")
+    list_of_books_lines = list_of_books.readlines()
+    readers_lines = readers.readlines()
+    for i in list_of_books_lines:
+        if i != "\n":
+            matrix_columns.append(i)
+    for i in readers_lines:
+        matrix_lines.append(str(i)[:-1])
+    matrix = [["0" for j in range(len(matrix_columns))] for i in range(len(matrix_lines))]
+    writeInFileMatrix(scoring_matrix_file, matrix)
+
 
 def getBookwIndex(index):
     books = open(books_file, 'r')
@@ -268,10 +270,9 @@ def reader_books(reader):
 # This function returns the index of a reader using its pseudonym.
 def getIndexPseudonym(pseudonym):
     list_of_pseudonym = list_pseudonym()
-    for i in range(len(list_of_pseudonym)):
-        if list_of_pseudonym[i] == pseudonym:
-            index = i
-    return index
+    for index in range(len(list_of_pseudonym)):
+        if list_of_pseudonym[index] == pseudonym:
+            return index
 
 
 def getPseudonymIndex(index):

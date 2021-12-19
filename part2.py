@@ -64,7 +64,9 @@ def addBook():
     scoring_matrix = open(scoring_matrix_file, "w")
     scoring_matrix.writelines(matrix_lines)
     list_of_books.write(book_to_append + "\n")
-
+    print("Book successfully added.")
+    list_of_books.close()
+    scoring_matrix.close()
 
 # This function allow to edit a book in "books.txt".
 def editBook():
