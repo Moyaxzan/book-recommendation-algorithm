@@ -1,4 +1,11 @@
-Gilbert,2
-William,2,3
-Lili,1,2,3
-Anonym,1,3
+Gilbert,5,7,8,9
+William,1,8,9,10
+AlienRoXoR17,3,4,5,6,10
+Anonyme,1,2,4,7
+Lecteur_assidu,1,2,3,5,6,8,9,10
+Haripoteur,3,5,8,9,10
+Lili,1,2,4,6,8,10
+ArchiBald_fx,7,9,10
+Tao,8,3
+Gwendal,5,2
+Ylan,5,4

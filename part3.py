@@ -12,6 +12,7 @@ books_read_file = "Resources/booksread.txt"
 books_file = "Resources/books.txt"
 scoring_matrix_file = "Resources/rating_matrix.txt"
 similarity_matrix_file = "Resources/similarity_matrix.txt"
+
 # PART THREE PRIMARY FUNCTIONS
 
 
@@ -47,6 +48,9 @@ def menu_part3():
         resetRatingMatrix()
     elif choice == "reset_similarity":
         resetSimilarityMatrix()
+    else:
+        print("Invalid input")
+        return menu_part3()
     if power == 0:
         return 0
     else:
@@ -77,7 +81,6 @@ def rateBook(reader, index_book=-1, mark=-1, index_reader=-1):
             return 1
         elif num_book_to_rate == 'exit':
             return 0
-
 
         mark = input("Rate this book, from 1 to 5\n")
         if mark == 'back':
@@ -131,7 +134,7 @@ def recommendBook(reader):
         print("\nYou could like these books:\n")
 
     for k in range(len(books_not_in_common)):
-        print(str(k+1) + ".", getBookwIndex(books_not_in_common[k]).rstrip("\n"))
+        print(str(k+1) + ".", getBookWithIndex(books_not_in_common[k]).rstrip("\n"))
     selectbool = True
     while selectbool:
         index_book = input("\nSelect a book\n")
@@ -142,7 +145,7 @@ def recommendBook(reader):
             else:
                 print("invalid input: your number must be greater than 1 "
                       "and must not exceed " + str(len(books_not_in_common)))
-        except:
+        except ValueError:
             if index_book == "back":
                 return 1
             elif index_book == "exit":
@@ -161,11 +164,11 @@ def recommendBook(reader):
             return 0
         else:
             print("Please enter an integer, between 1 and 5")
-    addReadedBook(index_reader, realindexbook, mark)
+    addReadBook(index_reader, realindexbook, mark)
 
 
 # This function stores a book and its mark given by an user in "booksread.txt" and "rating_matrix.txt"
-def addReadedBook(index_reader, index_book, mark):
+def addReadBook(index_reader, index_book, mark):
     booksread = open(books_read_file, "r")
     scoring_matrix_lines = getMatrix(scoring_matrix_file)
     booksread_lines = booksread.readlines()
@@ -199,7 +202,7 @@ def resetRatingMatrix():
     writeInFileMatrix(scoring_matrix_file, matrix)
 
 
-def getBookwIndex(index):
+def getBookWithIndex(index):
     books = open(books_file, 'r')
     books_lines = books.readlines()
     return books_lines[int(index)-1]
@@ -305,13 +308,13 @@ def countDeletedBooks():
 def list_pseudonym():
     f = open(reader_file, "r")
     cpt = 0
-    readedFile = f.read()
+    readFile = f.read()
     lst_pseudonym = []
-    for i in readedFile:
+    for i in readFile:
         if i == "\n":
             cpt += 1
     for i in range(cpt):
-        lst_pseudonym.append(readedFile.split("\n")[i].split(",")[0])
+        lst_pseudonym.append(readFile.split("\n")[i].split(",")[0])
     return lst_pseudonym
 
 
@@ -323,6 +326,3 @@ def getMatrix(file):
     for i in matrix_to_append:
         matrix.append(i.replace("\n", "").split(" "))
     return matrix
-
-
-

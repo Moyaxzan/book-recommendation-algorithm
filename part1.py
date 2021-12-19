@@ -1,6 +1,8 @@
 # PART 1 : Reader profiles, made by Gwendal HOLLOCOU and Tao SAINT PAUL AMOURDAM.
 # This file contains every functions related to the readers profiles.
-from part3 import *
+
+from part3 import resetSimilarityMatrix, list_pseudonym, countDeletedBooks
+
 reader_file = "Resources/readers.txt"
 books_read_file = "Resources/booksread.txt"
 books_file = "Resources/books.txt"
@@ -87,18 +89,17 @@ def addReader():
     resetSimilarityMatrix()
 
 
-# This function allows to view informations about a reader using its pseudonym.
+# This function allows to view information about a reader using its pseudonym.
 def viewReader(pseudonym):
     # Opens the "readers.txt" and create a string of the lines
     readers = open(reader_file, "r")
-    readers_lines = readers.read()
-    # We check if the inputted pseudonym is registered in order to print its informations.
-    if pseudonym in readers_lines:
-        readers_line_splitted = readers_lines.split("\n")
-        for cpt in range(len(readers_line_splitted)):
-            if pseudonym in readers_line_splitted[cpt]:
+    readers_lines = readers.readlines()
+    # We check if the inputted pseudonym is registered in order to print its information.
+    if pseudonym in list_pseudonym():
+        for cpt in range(len(readers_lines)):
+            if pseudonym in readers_lines[cpt]:
                 pronoun = "He/She"
-                lineSplited = readers_line_splitted[cpt].split(", ")
+                lineSplited = readers_lines[cpt].split(",")
                 if int(lineSplited[1]) == 1:
                     genderstr = "is a man."
                     pronoun = "He"
@@ -118,6 +119,8 @@ def viewReader(pseudonym):
                 print(lineSplited[0], genderstr, pronoun, agestr, "and likes", genre, "books.")
     else:
         print("This pseudonym is not registered")
+        pseudonym = input("what pseudo do you want to edit? \n")
+        return viewReader(pseudonym)
 
 
 # This function allows to edit a reader's profile using its pseudonym.
@@ -159,16 +162,16 @@ def editReader(pseudonym):
         matrix.close()
         resetSimilarityMatrix()
     else:
-        print("The user you want to edit is not registere")
+        print("The user you want to edit is not registered")
 
 
-# This functions allows to delete a readers's profile using its pseudonym.
+# This functions allows to delete a reader's profile using its pseudonym.
 def deleteReader(pseudonym):
     # We open every files we will edit in read mode.
     readers = open(reader_file, "r")
     book_reads = open(books_read_file, "r")
     scoring_matrix = open(scoring_matrix_file, "r")
-    # We stock their values in differents lists to edit them.
+    # We stock their values in several lists to edit them.
     matrix_lines = scoring_matrix.readlines()
     readers_lines = readers.readlines()
     book_reads_lines = book_reads.readlines()
@@ -229,7 +232,7 @@ def createLineReader(*pseudonym):
         if len(pseudo) >= 3 and "," not in pseudo:
             pseudobool = False
         else:
-            print("invalide input : your pseudonym must exceed 2 characters and must not contain special characters.")
+            print("invalid input : your pseudonym must exceed 2 characters and must not contain special characters.")
             pseudobool = True
         # This block prevents a user from putting a name already registered, instead if a user editing his own profile
         # wants to keep his name. This is done by using a variable argument "*pseudonym" in the call of the function.
@@ -240,7 +243,7 @@ def createLineReader(*pseudonym):
             if pseudonym[0] == pseudo:
                 pseudobool = False
         else:
-            print("invalide input : pseudonym already taken")
+            print("invalid input : pseudonym already taken")
             pseudobool = True
 
     while genderbool:
@@ -256,7 +259,7 @@ def createLineReader(*pseudonym):
         elif gender == "exit":
             return 0, 0, 0
         else:
-            print("invalide input : you need to type 1, 2 or 3")
+            print("invalid input : you need to type 1, 2 or 3")
     while agebool:
         print("PRESS : ")
         print("1 if you are 18 years old")
@@ -270,7 +273,7 @@ def createLineReader(*pseudonym):
         elif age == "exit":
             return 0, 0, 0
         else:
-            print("invalide input : you need to type 1, 2 or 3")
+            print("invalid input : you need to type 1, 2 or 3")
     while readingStylebool:
         print("PICK YOUR FAVORITE GENRE :")
         print("1. sci-fi")
@@ -286,15 +289,15 @@ def createLineReader(*pseudonym):
             if 1 <= int(readingStyle) <= 7:
                 readingStylebool = False
             else:
-                print("invalide input : you need to type a number between 1 and 7")
-        except:
+                print("invalid input : you need to type a number between 1 and 7")
+        except ValueError:
             if readingStyle == "back":
                 return None, None, None
             elif readingStyle == "exit":
                 return 0, 0, 0
             else:
-                print("invalide input : you need to type a number between 1 and 7")
-    line_reader = str(pseudo) + ", " + str(gender) + ", " + str(age) + ", " + str(readingStyle) + "\n"
+                print("invalid input : you need to type a number between 1 and 7")
+    line_reader = str(pseudo) + "," + str(gender) + "," + str(age) + "," + str(readingStyle) + "\n"
     print("Which books have you read ?")
     # Prints every books in the file books.txt
     displayBooks()
@@ -321,25 +324,25 @@ def createLineReader(*pseudonym):
             if input_books in registered_book:
                 print("You have already registered this book\n")
             else:
-                registered_book.append(input_books)
                 mark = input("Rate this book from 1 to 5. (You can write 'skip' to skip rating this book)\n")
                 while int(mark) < 0 or int(mark) > 5:
                     mark = int(input("Rate this book, from 1 to 5\n"))
+                registered_book.append(input_books)
                 if mark != "skip":
                     line_books_read += input_books + ","
                     # We have to do this because we print to the user the books with indexes from 1 to X,
-                    # but they go from 0 to X-1 in python so we need to substract one from his input to get
+                    # but they go from 0 to X-1 in python so we need to subtract one from his input to get
                     # the right index.
                     input_books = int(input_books) - 1
-                    # Create a list from the string we will append to the scoring matrix in order to edit it simplier.
-                    liste_line_matrix = list(line_matrix_to_append)
-                    for i in range(len(liste_line_matrix)):
+                    # Create a list from the string we will append to the scoring matrix in order to edit it easier.
+                    lst_line_matrix = list(line_matrix_to_append)
+                    for i in range(len(lst_line_matrix)):
                         # We multiply the input by 2 because there are spaces (" ") in the scoring matrix.
                         if i == int(input_books)*2:
-                            liste_line_matrix[i] = mark
+                            lst_line_matrix[i] = mark
                     # Retrieves a string from what we just done to put the mark at the good spot in the list.
-                    line_matrix_to_append = "".join(liste_line_matrix)
-        except:
+                    line_matrix_to_append = "".join(lst_line_matrix)
+        except ValueError or TypeError:
             if input_books == "back":
                 return None, None, None
             elif input_books == "exit":

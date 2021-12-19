@@ -1,6 +1,7 @@
 # PART 2 : Visit the book depository, made by Gwendal HOLLOCOU and Tao SAINT PAUL AMOURDAM.
 # This file contains every functions related to the books.
-from part1 import *
+
+from part1 import displayBooks, resetSimilarityMatrix
 
 reader_file = "Resources/readers.txt"
 books_read_file = "Resources/booksread.txt"
@@ -67,6 +68,7 @@ def addBook():
     print("Book successfully added.")
     list_of_books.close()
     scoring_matrix.close()
+
 
 # This function allow to edit a book in "books.txt".
 def editBook():
