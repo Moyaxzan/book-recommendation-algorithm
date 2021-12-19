@@ -19,6 +19,7 @@ def menu_part2():
     print("Write 3 to delete a book")
     print("Write 'back' to return to the last menu")
     choice = input("What do you want to do ?\n")
+
     if choice == "1":
         power = addBook()
     elif choice == "2":
@@ -32,6 +33,7 @@ def menu_part2():
     else:
         print("invalid input. try again.")
         return menu_part2()
+
     if power == 0:
         return 0
     else:
@@ -40,11 +42,13 @@ def menu_part2():
 
 # This function allows to add a book to "books.txt".
 def addBook():
+
     # Open the files we will need to edit and get a list of their lines for each.
     list_of_books = open(books_file, "r")
     scoring_matrix = open(scoring_matrix_file, "r")
     matrix_lines = scoring_matrix.readlines()
     list_of_books_readlines = list_of_books.readlines()
+
     # Receive
     book_to_append = input("What book do you want to add ?\n")
     while book_to_append in [x.replace('\n', '') for x in list_of_books_readlines]:
@@ -54,6 +58,7 @@ def addBook():
         return menu_part2()
     elif book_to_append == "exit":
         return 0
+
     # Removes the "\n" at the end of every lines of "rating_matrix.txt",
     # then append a zero with "\n" at the end of each lines
     # (which basically create a new column). We then appends the name of the new book at the end of "books.txt".
@@ -61,6 +66,7 @@ def addBook():
         line = matrix_lines[cpt].rstrip()
         line += " 0\n"
         matrix_lines[cpt] = line
+
     list_of_books = open(books_file, "a")
     scoring_matrix = open(scoring_matrix_file, "w")
     scoring_matrix.writelines(matrix_lines)
@@ -109,11 +115,13 @@ def deleteBook():
     book_reads_readlines = book_reads.readlines()
     scoring_matrix_lines = scoring_matrix.readlines()
     displayBooks()
+
     book_to_delete = input("Which book do you want to delete ? \n")
     if book_to_delete == "back":
         return menu_part2()
     elif book_to_delete == "exit":
         return 0
+
     while book_to_delete not in [x.replace('\n', '') for x in list_of_books_readlines]:
         print("The book is not in the list")
         book_to_delete = input("Which book do you want to delete ? \n")
@@ -121,13 +129,16 @@ def deleteBook():
             return menu_part2()
         elif book_to_delete == "exit":
             return 0
+
     index = getIndexBook(book_to_delete)
     for i in range(len(book_reads_readlines)):
         if str(index) in book_reads_readlines[i]:
             book_reads_readlines[i] = book_reads_readlines[i].replace(","+str(index), "")
+
     for i in range(len(scoring_matrix_lines)):
         line = scoring_matrix_lines[i][0:index*2] + scoring_matrix_lines[i][index*2+2:len(scoring_matrix_lines[i])]
         scoring_matrix_lines[i] = line
+
     list_of_books_readlines[index] = "\n"
     list_of_books = open(books_file, "w")
     book_reads = open(books_read_file, "w")
@@ -145,6 +156,7 @@ def getIndexBook(book):
     list_of_books = open(books_file, "r")
     list_of_books_readlines = list_of_books.readlines()
     index = 0
+
     for i in range(len(list_of_books_readlines)):
         if list_of_books_readlines[i].replace("\n", "") == book:
             index = i

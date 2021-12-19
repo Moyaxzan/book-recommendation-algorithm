@@ -18,10 +18,10 @@ similarity_matrix_file = "Resources/similarity_matrix.txt"
 
 # This function allows to navigate through part3 functions
 def menu_part3():
+    power = 1
     print("Write 1 to rate a book")
     print("Write 2 to get recommended a book")
     choice = input("What do you want to do ?\n")
-    power = 1
     if choice == "1":
         pseudo = input("what is your pseudonym ?\n")
         while pseudo not in list_pseudonym():
@@ -33,6 +33,7 @@ def menu_part3():
         power = rateBook(pseudo)
         if power == 1:
             return menu_part3()
+
     elif choice == "2":
         pseudo = input("what is your pseudonym ?\n")
         while pseudo not in list_pseudonym():
@@ -44,6 +45,7 @@ def menu_part3():
         power = recommendBook(pseudo)
         if power == 1:
             return menu_part3()
+
     elif choice == "reset_scoring":
         resetRatingMatrix()
     elif choice == "reset_similarity":
@@ -51,6 +53,7 @@ def menu_part3():
     else:
         print("Invalid input")
         return menu_part3()
+
     if power == 0:
         return 0
     else:
@@ -100,6 +103,7 @@ def recommendBook(reader):
     resetSimilarityMatrix()
     similarity_matrix = getMatrix(similarity_matrix_file)
     rating_matrix = getMatrix(scoring_matrix_file)
+
     books_read = reader_books(reader)
     index_reader = getIndexPseudonym(reader)
     max_similarity = 0.0
@@ -172,10 +176,12 @@ def addReadBook(index_reader, index_book, mark):
     booksread = open(books_read_file, "r")
     scoring_matrix_lines = getMatrix(scoring_matrix_file)
     booksread_lines = booksread.readlines()
+
     booksread_lines[index_reader] = booksread_lines[index_reader].rstrip("\n")
     booksread_lines[index_reader] += "," + str(index_book) + "\n"
     booksread = open(books_read_file, "w")
     booksread.writelines(booksread_lines)
+
     print(index_reader, scoring_matrix_lines)
     print(index_book, index_reader)
     scoring_matrix_lines[index_reader][int(index_book)-1] = mark
@@ -193,6 +199,7 @@ def resetRatingMatrix():
     readers = open(reader_file, "r")
     list_of_books_lines = list_of_books.readlines()
     readers_lines = readers.readlines()
+
     for i in list_of_books_lines:
         if i != "\n":
             matrix_columns.append(i)
@@ -214,6 +221,7 @@ def resetSimilarityMatrix():
     similarity_matrix = open(similarity_matrix_file, "w")
     rating_matrix = getMatrix(scoring_matrix_file)
     books_readers_lines = books_readers.readlines()
+
     # Initializes the similarity matrix to 0s
     similarity_matrix_to_write = \
         [["0" for j in range(len(books_readers_lines))] for i in range(len(books_readers_lines))]

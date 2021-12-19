@@ -3,10 +3,12 @@ from part2 import menu_part2
 from part3 import menu_part3
 
 if __name__ == "__main__":
+
     power = 1
     print("Hi user ! don't forget, "
-          "you can back at any time just by writing 'back' and exit by just writing 'exit'. "
+          "you can back at any time just by writing 'back' and exit by just writing 'exit'.\n"
           "Enjoy !")
+
     while power == 1:
         print("Write 1 to access part1 (readers part)")
         print("Write 2 to access part2 functions (books part)")
@@ -22,4 +24,5 @@ if __name__ == "__main__":
             print("You cannot go back from here. \n")
         elif choice == "exit":
             power = 0
+    # Being here means that power = 0 so we say goodbye exit the program
     print("\nHope you enjoyed ! Bye !")
