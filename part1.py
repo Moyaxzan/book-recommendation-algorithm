@@ -7,7 +7,6 @@ reader_file = "Resources/readers.txt"
 books_read_file = "Resources/booksread.txt"
 books_file = "Resources/books.txt"
 scoring_matrix_file = "Resources/rating_matrix.txt"
-dicogenre = {1: "sci-fi", 2: "Biography", 3: "Horror", 4: "Romance", 5: "Fable", 6: "History", 7: "Comedy"}
 
 #  PART ONE PRIMARY FUNCTIONS
 
@@ -115,7 +114,8 @@ def viewReader(pseudonym):
                 else:
                     agestr = "is more than 25 years old"
                 # This gets the right genre from the number in the reader's profile
-                genre = dicogenre[int(lineSplited[3])]
+                lst_genre = ["sci-fi", "Biography", "Horror", "Romance", "Fable", "History", "Comedy"]
+                genre = lst_genre[int(lineSplited[3])-1]
                 print(lineSplited[0], genderstr, pronoun, agestr, "and likes", genre, "books.")
     else:
         print("This pseudonym is not registered")
