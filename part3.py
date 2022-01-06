@@ -50,6 +50,10 @@ def menu_part3():
         resetRatingMatrix()
     elif choice == "reset_similarity":
         resetSimilarityMatrix()
+    elif choice == "back":
+        return 1
+    elif choice == "exit":
+        power = 0
     else:
         print("Invalid input")
         return menu_part3()
@@ -75,8 +79,10 @@ def rateBook(reader, index_book=-1, mark=-1, index_reader=-1):
 
         cpt = 0
         # Display every books to allow the reader
+        print(list_books_read)
+        print(books_lines)
         for book in list_books_read:
-            print(str(cpt+1) + ".", books_lines[int(book)])
+            print(str(cpt+1) + ".", books_lines[int(book)-1])
             cpt += 1
 
         num_book_to_rate = input("Which book do you want to rate ?\n")
@@ -192,8 +198,6 @@ def addReadBook(index_reader, index_book, mark):
     booksread = open(books_read_file, "w")
     booksread.writelines(booksread_lines)
 
-    print(index_reader, scoring_matrix_lines)
-    print(index_book, index_reader)
     scoring_matrix_lines[index_reader][int(index_book)-1] = mark
     writeInFileMatrix(scoring_matrix_file, scoring_matrix_lines)
 
